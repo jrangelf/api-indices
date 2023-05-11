@@ -1,0 +1,1 @@
+sqlacodegen postgresql://postgres:admin@localhost:5435/dcp_app > models.py

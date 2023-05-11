@@ -1,0 +1,5 @@
+FROM dpage/pgadmin4
+
+#WORKDIR /pgadmin4
+
+#RUN chmod -R 777 /var/lib/pgadmin/sessions

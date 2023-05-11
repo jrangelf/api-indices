@@ -1,0 +1,8 @@
+FROM postgres
+
+WORKDIR /db
+
+COPY db_dcp_backup_2.3.2023 .   
+
+#RUN pg_restore -U postgres -d dcp_app -1 /db/db_dcp_backup_2.3.2023
+
