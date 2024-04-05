@@ -53,6 +53,7 @@ async def indexadores(db: Session = Depends(get_db)):
      s_inpc = db.query(Inpc).order_by(Inpc.id.desc()).first()
      s_ipca = db.query(Ipca).order_by(Ipca.id.desc()).first()
      s_ipca15 = db.query(Ipca15).order_by(Ipca15.id.desc()).first()
+     s_igpm = db.query(Igpm).order_by(Igpm.id.desc()).first()
      # Converter a string em um objeto datetime
      #data_hora = datetime.strptime(ls_tr.data, '%Y-%m-%d %H:%M:%S+%z')
      # Formatá-lo como 'dd/mm/yyyy'
@@ -62,13 +63,15 @@ async def indexadores(db: Session = Depends(get_db)):
      dt_inpc = s_inpc.data.strftime('%d/%m/%Y')
      dt_ipca = s_ipca.data.strftime('%d/%m/%Y')
      dt_ipca15 = s_ipca15.data.strftime('%d/%m/%Y')
+     dt_igpm = s_igpm.data.strftime('%d/%m/%Y')
      tr = f"TR: {dt_tr} = {s_tr.valor}"
      selic = f"SELIC: {dt_selic} = {s_selic.valor}"
      selic_copom = f"SELIC COPOM: {dt_copom} = {s_copom.valor}"
      inpc = f"INPC: {dt_inpc} = {s_inpc.valor}"
      ipca = f"IPCA: {dt_ipca} = {s_ipca.valor}"
      ipca15 = f"IPCA-15: {dt_ipca15} = {s_ipca15.valor}"
-     indices = tr,selic,selic_copom,inpc,ipca,ipca15
+     igpm = f"IGP-M: {dt_igpm} = {s_igpm.valor}"
+     indices = tr,selic,selic_copom,inpc,ipca,ipca15,igpm
      if indices is not None:
          return indices
      raise HTTPException(status_code=404, detail=NOREGS)

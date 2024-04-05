@@ -3,8 +3,8 @@ from bt_queries import *
 from bt_database import *
 from bt_marcar_tabelas_para_atualizacao import *
 #from datetime import datetime
-from bt_atualizar_indexador_quinzenal import *
-from bt_buscar_indexadores_mensais import *
+from revise.bz_atualizar_indexador_quinzenal import *
+from revise.bz_buscar_indexadores_mensais import *
 from bt_consulta_bcb_indexadores import *
 #from bt_data_tools import incrementa_mes
 

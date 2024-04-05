@@ -14,29 +14,28 @@ from bt_conf_debug import *
 '''
 
 
-data_atual = dia_de_hoje() 
+data_atual = dia_de_hoje()
+linha_dupla = ("="*60) 
 #data_inicial_indexador = formatar_data_inicio_mes(data_atual)
 #data_final_indexador = incrementa_mes_str(data_inicial_indexador)
 
-print(f"\ndata_atual: {formatar_data_dmy(data_atual)}\n")
-#print(f"indexador:\n  -data_inicial: {data_inicial_indexador}")
-#print(f"  -data_final: {data_final_indexador}")
-print("============================================================")
+print("="*20+" LOG DE EVENTOS "+"="*24)
+print(f"data_atual: {formatar_data_dmy(data_atual)}")
+print(linha_dupla)
 
 
-#obter_as_datas_ultimos_registros()
+obter_as_datas_ultimos_registros()
 
-#marcar_tabelas_para_atualizacao(data_atual)
+marcar_tabelas_para_atualizacao(data_atual)
 
-#obter os indexadores do mes que precisam ser atualizados
+# obter os indexadores do mes que precisam ser atualizados
 indexadores_do_mes, data_busca, data_retorno = buscar_indexadores()
 
-print(f"data_busca:{data_busca}\ndata_retorno:{data_retorno}")
-print(f"indexadores_do_mes: {indexadores_do_mes}")
 
 if indexadores_do_mes:
-    print("**")
-    #atualizadas = atualizar_indexadores(indexadores_do_mes,data_busca,data_retorno)
+    print(f"data_busca:{data_busca}\ndata_retorno:{data_retorno}")
+    print(f"indexadores_do_mes: {indexadores_do_mes}")    
+    atualizadas = atualizar_indexadores(indexadores_do_mes,data_busca,data_retorno)
 
 
 

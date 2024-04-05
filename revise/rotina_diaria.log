@@ -599,3 +599,442 @@ codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
 data_busca:
 data_retorno:
 indexadores_do_mes: []
+==================== LOG DE EVENTOS ========================
+data_atual: 23/03/2024
+============================================================
+==================== LOG DE EVENTOS ========================
+data_atual: 24/03/2024
+============================================================
+==================== LOG DE EVENTOS ========================
+data_atual: 25/03/2024
+============================================================
+==================== LOG DE EVENTOS ========================
+data_atual: 26/03/2024
+============================================================
+==================== LOG DE EVENTOS ========================
+data_atual: 27/03/2024
+============================================================
+==================== LOG DE EVENTOS ========================
+data_atual: 28/03/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-02-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-02-01
+ipca15 : 2024-02-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-02-01
+seliccopom : 2024-02-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+==================== LOG DE EVENTOS ========================
+data_atual: 29/03/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-02-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-02-01
+ipca15 : 2024-02-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-02-01
+seliccopom : 2024-02-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+==================== LOG DE EVENTOS ========================
+data_atual: 30/03/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-02-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-02-01
+ipca15 : 2024-02-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-02-01
+seliccopom : 2024-02-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+==================== LOG DE EVENTOS ========================
+data_atual: 31/03/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-02-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-02-01
+ipca15 : 2024-02-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-02-01
+seliccopom : 2024-02-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+==================== LOG DE EVENTOS ========================
+data_atual: 01/04/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-02-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-02-01
+ipca15 : 2024-02-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-02-01
+seliccopom : 2024-02-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 100 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 102 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 104 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 112 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 110 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 106 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 108 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+dict_registros: {'IPCA': '01/02/2024', 'IPCA-15': '01/02/2024', 'SELIC-COPOM': '01/02/2024', 'SELIC': '01/02/2024', 'TR': '01/02/2024', 'INPC': '01/02/2024', 'IGP-M': '01/02/2024'}
+indexes: {'IPCA': '433', 'IPCA-15': '7478', 'SELIC-COPOM': '432', 'SELIC': '4390', 'TR': '226', 'INPC': '188', 'IGP-M': '189'}
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/03/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/03/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/03/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/04/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/03/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/03/2024
+data_busca:01/03/2024
+data_retorno:01/03/2024
+indexadores_do_mes: [['IPCA', '01/02/2024', '0.83'], ['IPCA-15', '01/03/2024', '0.36'], ['SELIC-COPOM', '01/03/2024', '11.25'], ['SELIC', '01/03/2024', '0.83'], ['TR', '01/03/2024', '0.0331'], ['INPC', '01/02/2024', '0.81'], ['IGP-M', '01/03/2024', '-0.47']]
+codigo_dict: {'IPCA': 'ipca', 'IPCA-15': 'ipca15', 'SELIC-COPOM': 'seliccopom', 'SELIC': 'selic', 'TR': 'tr', 'INPC': 'inpc', 'IGP-M': 'igpm'}
+indexadores: [['IPCA', '01/02/2024', '0.83'], ['IPCA-15', '01/03/2024', '0.36'], ['SELIC-COPOM', '01/03/2024', '11.25'], ['SELIC', '01/03/2024', '0.83'], ['TR', '01/03/2024', '0.0331'], ['INPC', '01/02/2024', '0.81'], ['IGP-M', '01/03/2024', '-0.47']]
+ipca (102)  2024-02-01 0.83
+data_para_inserir_tabela_indexador:2024-02-01
+===============================================================
+Novo indexador  ipca  data:  2024-02-01 valor:  0.83
+===============================================================
+Update colunas data e processar na tabela logatualizacao:  102
+ipca15 (110)  2024-03-01 0.36
+data_para_inserir_tabela_indexador:2024-03-01
+===============================================================
+Novo indexador  ipca15  data:  2024-03-01 valor:  0.36
+===============================================================
+Update colunas data e processar na tabela logatualizacao:  110
+seliccopom (108)  2024-03-01 11.25
+data_para_inserir_tabela_indexador:2024-03-01
+===============================================================
+Novo indexador  seliccopom  data:  2024-03-01 valor:  11.25
+===============================================================
+Update colunas data e processar na tabela logatualizacao:  108
+selic (106)  2024-03-01 0.83
+data_para_inserir_tabela_indexador:2024-03-01
+===============================================================
+Novo indexador  selic  data:  2024-03-01 valor:  0.83
+===============================================================
+Update colunas data e processar na tabela logatualizacao:  106
+tr (104)  2024-03-01 0.0331
+data_para_inserir_tabela_indexador:2024-03-01
+===============================================================
+Novo indexador  tr  data:  2024-03-01 valor:  0.0331
+===============================================================
+Update colunas data e processar na tabela logatualizacao:  104
+inpc (100)  2024-02-01 0.81
+data_para_inserir_tabela_indexador:2024-02-01
+===============================================================
+Novo indexador  inpc  data:  2024-02-01 valor:  0.81
+===============================================================
+Update colunas data e processar na tabela logatualizacao:  100
+igpm (112)  2024-03-01 -0.47
+data_para_inserir_tabela_indexador:2024-03-01
+===============================================================
+Novo indexador  igpm  data:  2024-03-01 valor:  -0.47
+===============================================================
+Update colunas data e processar na tabela logatualizacao:  112
+==================== LOG DE EVENTOS ========================
+data_atual: 02/04/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-03-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-03-01
+ipca15 : 2024-03-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-03-01
+seliccopom : 2024-03-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 100 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 102 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+dict_registros: {'IPCA': '01/02/2024', 'INPC': '01/02/2024'}
+indexes: {'IPCA': '433', 'INPC': '188'}
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+data_busca:01/03/2024
+data_retorno:01/02/2024
+indexadores_do_mes: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+codigo_dict: {'IPCA': 'ipca', 'INPC': 'inpc'}
+indexadores: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+ipca (102)  2024-02-01 0.83
+data_para_inserir_tabela_indexador:2024-02-01
+Traceback (most recent call last):
+  File "/revise/bt_rotina_diaria.py", line 38, in <module>
+    atualizadas = atualizar_indexadores(indexadores_do_mes,data_busca,data_retorno)
+  File "/revise/bt_atualizar_indexadores.py", line 34, in atualizar_indexadores
+    if pos:
+UnboundLocalError: local variable 'pos' referenced before assignment
+==================== LOG DE EVENTOS ========================
+data_atual: 03/04/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-03-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-03-01
+ipca15 : 2024-03-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-03-01
+seliccopom : 2024-03-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 100 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 102 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+dict_registros: {'IPCA': '01/02/2024', 'INPC': '01/02/2024'}
+indexes: {'IPCA': '433', 'INPC': '188'}
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+data_busca:01/03/2024
+data_retorno:01/02/2024
+indexadores_do_mes: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+codigo_dict: {'IPCA': 'ipca', 'INPC': 'inpc'}
+indexadores: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+ipca (102)  2024-02-01 0.83
+data_para_inserir_tabela_indexador:2024-02-01
+inpc (100)  2024-02-01 0.81
+data_para_inserir_tabela_indexador:2024-02-01
+==================== LOG DE EVENTOS ========================
+data_atual: 04/04/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-03-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-03-01
+ipca15 : 2024-03-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-03-01
+seliccopom : 2024-03-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 100 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 102 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+dict_registros: {'IPCA': '01/02/2024', 'INPC': '01/02/2024'}
+indexes: {'IPCA': '433', 'INPC': '188'}
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+data_busca:01/03/2024
+data_retorno:01/02/2024
+indexadores_do_mes: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+codigo_dict: {'IPCA': 'ipca', 'INPC': 'inpc'}
+indexadores: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+ipca (102)  2024-02-01 0.83
+data_para_inserir_tabela_indexador:2024-02-01
+inpc (100)  2024-02-01 0.81
+data_para_inserir_tabela_indexador:2024-02-01
+==================== LOG DE EVENTOS ========================
+data_atual: 05/04/2024
+============================================================
+=============================================
+data_atualizacao (logatualizacao) atualizada 
+inpc : 2024-02-01
+ipca : 2024-02-01
+tr : 2024-03-01
+t202_tabela_pnep : 2021-12-01
+t210_tabela_pnep : 2023-08-01
+igpm : 2024-03-01
+ipca15 : 2024-03-01
+t204_tabela_pnep : 2023-08-01
+t206_tabela_pnep : 2023-08-01
+t208_tabela_pnep : 2021-12-01
+t236_tabela_pnep : 2023-08-01
+t212_tabela_pnep : 2023-08-01
+selic : 2024-03-01
+seliccopom : 2024-03-01
+t200_tabela_pnep : 2023-08-01
+=============================================
+===============================================================
+processar (logatualizacao) atualizada
+codigo: 100 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 102 data_log: 2024-02-01 00:00:00+00:00 processar=1
+codigo: 202 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 204 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 206 data_log: 2023-08-01 00:00:00+00:00 processar=1
+codigo: 208 data_log: 2021-12-01 00:00:00+00:00 processar=1
+codigo: 200 data_log: 2023-08-01 00:00:00+00:00 processar=1
+dict_registros: {'IPCA': '01/02/2024', 'INPC': '01/02/2024'}
+indexes: {'IPCA': '433', 'INPC': '188'}
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+[dt_ini_busca_bc]: 01/03/2024
+[dt_fin_busca_bc]: 01/03/2024
+data_inicial_retorno_bc: 01/03/2024
+data_final_retorno_bc: 01/02/2024
+data_busca:01/03/2024
+data_retorno:01/02/2024
+indexadores_do_mes: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+codigo_dict: {'IPCA': 'ipca', 'INPC': 'inpc'}
+indexadores: [['IPCA', '01/02/2024', '0.83'], ['INPC', '01/02/2024', '0.81']]
+ipca (102)  2024-02-01 0.83
+data_para_inserir_tabela_indexador:2024-02-01
+inpc (100)  2024-02-01 0.81
+data_para_inserir_tabela_indexador:2024-02-01

@@ -12,16 +12,26 @@ from bt_data_tools import converter_data_para_str
 def obter_as_datas_ultimos_registros(): 
     print(f"----------------------------------\nobter_as_datas_ultimos_registros()\n----------------------------------")   
     tabelas = selecionar_tabelas(query0) # seleciona todas as tabelas (index e indices)
-    #print(f"tabelas:\n{tabelas}")
-    datas = seleciona_ultima_data_das_tabelas(tabelas,query3) # seleciona as datas dos últimos registros
-    #print(f"datas:\n{datas}")
-    codigos = selecionar_codigos_tabelas(datas,query4) # seleciona os códigos das tabelas
     
+    ''' tabelas, codigos = buscar_nome_e_codigo_das_tabelas(query0)'''
+    
+    print(f"tabelas:\n{tabelas}")
+    
+    datas = seleciona_ultima_data_das_tabelas(tabelas,query3) # seleciona as datas dos últimos registros
+    
+    ''' datas = buscar_data_ultimo_registro_tabelas(tabelas,query3)'''
+
+    print(f"datas:\n{datas}")
+    codigos = selecionar_codigos_tabelas(datas,query4) # seleciona os códigos das tabelas
+    print(codigos)
     for i in codigos:
         print(f"{i[0]}:  {i[1]}  {converter_data_para_str(i[2])}")
     
     # atualiza a tabela logatualizacao com a ultima data de cada tabela de indexadores
     update_datas_logatualizacao(codigos, query6) # UPDATE logatualizacao SET data_atualizacao='$1' WHERE codigo_tabela=$2     
+    
+    ''' atualizar_datas_em_logatualizacao(codigos,query6)'''
+    
     return None
 
     

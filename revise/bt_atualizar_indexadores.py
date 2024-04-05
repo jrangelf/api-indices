@@ -31,9 +31,9 @@ def atualizar_indexadores(indexadores,data_busca, data_retorno):
         if data_busca == data_retorno:
             pos=inserir_indice_bcb(dt_formatada, valor, query12, tabela)
             
-        if pos:
-            atualizadas.append([indexador[0], indexador[1], indexador[2]])
-            resetar_flag_processar(codigotab,dt_formatada,query14)
+            if pos:
+                atualizadas.append([indexador[0], indexador[1], indexador[2]])
+                resetar_flag_processar(codigotab,dt_formatada,query14)
 
     return atualizadas
 
