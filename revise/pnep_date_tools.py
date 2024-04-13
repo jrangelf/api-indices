@@ -16,7 +16,7 @@ class DateTools:
     def formatar_data_inicio_mes(data):
         return data.strftime("01/%m/%Y")
 
-    def verificar_data_atualizacao(codigo, data_atual, data_log):
+    def verificar_data_atualizacao(self, codigo, data_atual, data_log):
         ''' 1. atualiza o campo processar para 1 caso a diferença de meses entre a data atual e a 
             data da ultima atualizacao de cada tabela de indexadores for maior ou igual a 2
             2. atualiza o campo processar para 1 caso a diferenca de meses entre a data atual e a 

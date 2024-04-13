@@ -53,7 +53,7 @@ query16 = "SELECT B.nome, A.data_atualizacao \
            FROM logatualizacao A \
            INNER JOIN indexadores B ON A.indexador = B.codigo \
            WHERE A.processar=1"
-
+'''
 query17 = "SELECT indexadores.nome, descricao_tabelas.nome \
            FROM descricao_tabelas \
            JOIN indexadores ON CAST(descricao_tabelas.indexador AS INTEGER) = indexadores.codigo \
@@ -65,7 +65,7 @@ query17 = "SELECT indexadores.nome, descricao_tabelas.nome \
            JOIN indexadores ON descricao_tabelas.regra_de_calculo = indexadores.codigo \
            JOIN logatualizacao ON descricao_tabelas.regra_de_calculo = logatualizacao.indexador \
            WHERE logatualizacao.processar = 1" 
-'''
+
 
 
 query18 = "SELECT codigo FROM descricao_tabelas WHERE nome='$1'"

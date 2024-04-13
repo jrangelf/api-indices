@@ -79,7 +79,7 @@ class DescricaoTabelas(Base):
     descricao = Column(String(200))
     regra_de_calculo = Column(Integer)
     observacao = Column(Text)
-    indexador = Column(String(10))
+    indexador = Column(Integer)
 
 
 class RegraAtualizacao(Base):
