@@ -62,8 +62,8 @@ query17 = "SELECT indexadores.nome, descricao_tabelas.nome \
 '''
 query17 = "SELECT indexadores.nome, descricao_tabelas.nome \
            FROM descricao_tabelas \
-           JOIN indexadores ON descricao_tabelas.regra_de_calculo = indexadores.codigo \
-           JOIN logatualizacao ON descricao_tabelas.regra_de_calculo = logatualizacao.indexador \
+           JOIN indexadores ON descricao_tabelas.indexador = indexadores.codigo \
+           JOIN logatualizacao ON descricao_tabelas.indexador = logatualizacao.indexador \
            WHERE logatualizacao.processar = 1" 
 
 

@@ -17,8 +17,12 @@ apibcb = ApiBcb()
 
 
 indexadores = Indexadores(datetools=datetools, tabelas=tabelas, apibcb=apibcb)
-indexadores.atualizar_indexadores()
-
+tabelas=indexadores.atualizar_indexadores()
+if tabelas:
+    print('...')
+else:
+    print('Nao ha tabelas de indexadores para atualizar.')
+    
 indices = Indices()
 indices.atualizar_indices()
 

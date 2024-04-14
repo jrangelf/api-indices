@@ -8,16 +8,18 @@ class Indexadores:
     
     @staticmethod
     def agregar(lista1, lista2):
-        # Criando um conjunto dos segundos elementos de lista1 para verificação rápida de correspondência
-        set_lista1 = {item[1] for item in lista1}
-        
-        # Usando compreensão de lista para criar lista3
-        lista3 = [(item2[0], item2[1], item1[0], item1[3]) 
-                for item2 in lista2 
-                for item1 in lista1 
-                if item2[0] in set_lista1 and item1[1] == item2[0]]
-        
-        return lista3
+        if lista1 and lista2:
+            # Criando um conjunto dos segundos elementos de lista1 para verificação rápida de correspondência            
+            set_lista1 = {item[1] for item in lista1}
+            
+            # Usando compreensão de lista para criar lista3
+            lista3 = [(item2[0], item2[1], item1[0], item1[3]) 
+                    for item2 in lista2 
+                    for item1 in lista1 
+                    if item2[0] in set_lista1 and item1[1] == item2[0]]
+            
+            return lista3
+        return None
 
     # def agregar(lista1, lista2):
     #     lista3 = []
@@ -170,22 +172,24 @@ class Indexadores:
             # incluir dois registro em cada tupla da lista (nome da tabela e codigo do indexador)
             tab_marcadas_merge = Indexadores.agregar(tabela_codigo_data_indexador,
                                                                tabelas_marcadas_atualizacao)
-            # retirar da lista de tabelas_para_processar as tabelas que nao sao de indexadores
-            tab_proc_filtrada = [tupla for tupla in tab_marcadas_merge if tupla[0] < 200]
-            
-            if tab_proc_filtrada:
-                print(f'tabelas de indexadores para atualizar:')
-                for registro in tab_proc_filtrada:
-                    print(registro)
-
-                # obter os indexadores do mes que precisam ser atualizados
-                #indexadores_do_mes, data_busca, data_retorno = buscar_indexadores()
-
-                #if indexadores_do_mes:
-                #    print(f"data_busca:{data_busca}\ndata_retorno:{data_retorno}")
-                #    print(f"indexadores_do_mes: {indexadores_do_mes}")    
-                #    atualizadas = atualizar_indexadores(indexadores_do_mes,data_busca,data_retorno)
+            if tab_marcadas_merge:
+                # retirar da lista de tabelas_para_processar as tabelas que nao sao de indexadores
+                tab_proc_filtrada = [tupla for tupla in tab_marcadas_merge if tupla[0] < 200]
                 
+                if tab_proc_filtrada:
+                    print(f'tabelas de indexadores para atualizar:')
+                    for registro in tab_proc_filtrada:
+                        print(registro)
+
+                    # obter os indexadores do mes que precisam ser atualizados
+                    #indexadores_do_mes, data_busca, data_retorno = buscar_indexadores()
+
+                    #if indexadores_do_mes:
+                    #    print(f"data_busca:{data_busca}\ndata_retorno:{data_retorno}")
+                    #    print(f"indexadores_do_mes: {indexadores_do_mes}")    
+                    #    atualizadas = atualizar_indexadores(indexadores_do_mes,data_busca,data_retorno)
+                
+        
         
         return None
     
