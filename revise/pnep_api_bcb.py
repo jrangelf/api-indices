@@ -5,7 +5,7 @@ from datetime import datetime
 
 class ApiBcb():
 
-    def consulta_bc_ultimos(codigo_bcb, ultimos):
+    def consulta_bc_ultimos(self, codigo_bcb, ultimos):
         url = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_bcb}/dados/ultimos/{ultimos}?formato=json'
         response = requests.get(url)    
         if response.status_code == 200:
@@ -28,7 +28,7 @@ class ApiBcb():
             return None
 
 
-    def consulta_bc(codigo_bcb):
+    def consulta_bc(self, codigo_bcb):
         url = f'http://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_bcb}/dados?formato=json'
         response = requests.get(url)        
         if response.status_code == 200:
@@ -50,7 +50,7 @@ class ApiBcb():
             print(f"Erro ao acessar a API. Código de status: {response.status_code}")
             return None
 
-    def consultar_bc_periodo(codigo_bcb, inicio, final):
+    def consultar_bc_periodo(self, codigo_bcb, inicio, final):
         url = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_bcb}/dados?formato=json&dataInicial={inicio}&dataFinal={final}'
         
         try:

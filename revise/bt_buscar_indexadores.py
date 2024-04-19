@@ -11,7 +11,7 @@ def buscar_indexadores():
     dictregistros = {}
     indexadores_do_mes = []
     data_busca = ""
-    data_retorno = ""
+    data_retorno = "" 
    
     # seleciona todos os indices que precisam ser atualizados
     registros = selecionar_multiplos(query16)    
@@ -26,7 +26,8 @@ def buscar_indexadores():
         print (f"dict_registros: {dictregistros}")
 
         # seleciona todos os indices e seus respectivos codigos bc    
-        indexes = buscar_codigo_bcb_indexadores()  
+        indexes = buscar_codigo_bcb_indexadores()
+        print(f"indexes: {indexes}")  
 
         # Retirar as chaves do dicionário 'indexes' que não estão presentes no dicionário 'dictregistros'
         indexes = {chave: valor for chave, valor in indexes.items() if chave in dictregistros}

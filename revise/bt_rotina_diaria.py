@@ -35,7 +35,7 @@ indexadores_do_mes, data_busca, data_retorno = buscar_indexadores()
 if indexadores_do_mes:
     print(f"data_busca:{data_busca}\ndata_retorno:{data_retorno}")
     print(f"indexadores_do_mes: {indexadores_do_mes}")    
-    atualizadas = atualizar_indexadores(indexadores_do_mes,data_busca,data_retorno)
+    #atualizadas = atualizar_indexadores(indexadores_do_mes,data_busca,data_retorno)
 
 
 

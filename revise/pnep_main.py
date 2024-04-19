@@ -17,14 +17,18 @@ apibcb = ApiBcb()
 
 
 indexadores = Indexadores(datetools=datetools, tabelas=tabelas, apibcb=apibcb)
-tabelas=indexadores.atualizar_indexadores()
-if tabelas:
-    print('...')
-else:
-    print('Nao ha tabelas de indexadores para atualizar.')
+tabelas_bcb = indexadores.atualizar_indexadores()
+if not tabelas_bcb:
+    print('Nao ha tabelas de indexadores do BCB para atualizar.')
     
+
+
 indices = Indices()
-indices.atualizar_indices()
+tabelas_pnep = indices.atualizar_indices()
+if tabelas_pnep:
+    print(tabelas_pnep)
+else:
+    print('Nao ha tabelas de indices_pnep para atualizar')
 
 
 

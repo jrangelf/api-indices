@@ -1,16 +1,40 @@
 from datetime import datetime, timedelta
 
-class DateTools:    
+class DateTools:
+
+
+    @staticmethod
+    def dia_de_hoje():
+        return datetime.now()
     
     def formatar_data_str_ymd(self,data):
         return data.strftime("%Y-%m-%d")
 
     def formatar_data_str_dmy(self, data):
         return data.strftime("%d/%m/%Y")
+    
+    def incrementa_mes_str(self, data_str):
+        # Converter a string de data para um objeto datetime
+        data = datetime.strptime(data_str, '%d/%m/%Y')
+        # Incrementar o mês
+        data_proximo_mes = data.replace(day=1) + timedelta(days=32)
+        data_proximo_mes_formatado = data_proximo_mes.strftime('01/%m/%Y')
+        return data_proximo_mes_formatado
 
-    @staticmethod
-    def dia_de_hoje():
-        return datetime.now()
+    def formatar_dmy_para_ymd(self, data_str):
+        ''' converte a string 01/07/2023 em 2023-07-01 '''
+        partes = data_str.split("/")
+        nova_data = f"{partes[2]}-{partes[1]}-{partes[0]}"
+        return nova_data
+
+
+
+
+
+
+
+
+
     
     
     def formatar_data_inicio_mes(data):
@@ -37,12 +61,7 @@ class DateTools:
         return False
 
 
-    def formatar_dmy_para_ymd(data_str):
-        ''' converte a string 01/07/2023 em 2023-07-01 '''
-        partes = data_str.split("/")
-        nova_data = f"{partes[2]}-{partes[1]}-{partes[0]}"
-        return nova_data
-
+    
     def verificar_quinzena(data1):
         return data1.day == 15    
 
@@ -88,10 +107,4 @@ class DateTools:
             data_incrementada = data.replace(year=ano, month=mes, day=1)        
             return data_incrementada
         
-    def incrementa_mes_str(data_str):
-        # Converter a string de data para um objeto datetime
-        data = datetime.strptime(data_str, '%d/%m/%Y')
-        # Incrementar o mês
-        data_proximo_mes = data.replace(day=1) + timedelta(days=32)
-        data_proximo_mes_formatado = data_proximo_mes.strftime('01/%m/%Y')
-        return data_proximo_mes_formatado
+    

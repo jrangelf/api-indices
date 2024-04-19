@@ -19,12 +19,29 @@ class QueriesSQL:
     ''' seleciona a codigo e data de atualização na tabela logatualizacao '''
     consulta_5 = "SELECT codigo_tabela, data_atualizacao FROM logatualizacao"
 
+    ''' seleciona os codigos dos indexadores do banco central'''
+    consulta_6 = "SELECT descricao FROM indexadores WHERE codigo = $"
+
+    
+
+     
+    consulta_7 = "SELECT indexadores.nome, descricao_tabelas.nome \
+           FROM descricao_tabelas \
+           JOIN indexadores ON descricao_tabelas.indexador = indexadores.codigo \
+           JOIN logatualizacao ON descricao_tabelas.indexador = logatualizacao.indexador \
+           WHERE logatualizacao.processar = 1" 
     
     
-    ''' faz um update da coluna processar da tabela logatualizacao'''
+    ''' faz um update da coluna processar da tabela logatualizacao para 1'''
     atualizacao_1 = "UPDATE logatualizacao SET processar=1 WHERE codigo_tabela=$"
 
+    ''' faz um update da coluna processar da tabela logatualizacao para 0'''
+    atualizacao_2 = "UPDATE logatualizacao SET processar=0, data_atualizacao='$1' WHERE codigo_tabela=$2"
 
+
+
+    ''' faz um insert de data e valor na tabela de indexador '''
+    insercao_1 = "INSERT INTO $1(data, valor) VALUES ('$2', $3)"
 
 
 
