@@ -32,10 +32,7 @@ class DateTools:
             data da ultima atualizacao de cada tabela de indices pnep for maior ou igual a 1
             3. caso as datas estejam em anos diferentes o campo processar eh atualizado para 1
         '''
-        # print(f"\n====================================")
-        # print(f"codigo:{codigo}\ndata_atual:{data_atual}\ndata_log:{data_log}")
-        # print(f"\n====================================")
-
+        
         if (data_atual.year > data_log.year):
             return True        
         elif codigo < 200 and (data_atual.month - data_log.month >=2):
@@ -61,19 +58,8 @@ class DateTools:
             data_incrementada = data.replace(year=ano, month=mes, day=1)        
             return data_incrementada
     
-
-
-
-
-
-
-    
-    
     def formatar_data_inicio_mes(data):
         return data.strftime("01/%m/%Y")
-
-
-
     
     def verificar_quinzena(data1):
         return data1.day == 15    
