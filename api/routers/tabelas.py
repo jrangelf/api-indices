@@ -6,8 +6,6 @@ from fastapi import APIRouter, Depends, HTTPException, Path, status, Query, Body
 from database import SessionLocal, engine
 from models import *
 from datetime import datetime
-
-from tools import *
 from constantes import NOREGS
 
 router = APIRouter()
