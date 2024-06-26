@@ -8,14 +8,11 @@ services:
       dockerfile: dockerfile.pgsqlapi
     ports:
       - '5438:5432'
-    #networks:
-    #  - prod
     restart: always  
     volumes:
       - ./pgsqlapi/db:/var/lib/postgresql/data      
     env_file:
       - ./env/pgsqlapi.env
-
    
   api:
     container_name: api-indice
@@ -24,10 +21,6 @@ services:
       dockerfile: ./dockerfile.api         
     ports:
       - '8001:8001'
-    #networks:
-    #  - prod
-    #depends_on:
-    #  - pgsql2
     restart: on-failure
     volumes:
       - ./api:/api          
@@ -38,30 +31,19 @@ services:
     container_name: revise
     build:
       context: ./revise
-      dockerfile: ./dockerfile.revise    
-    #command: python3 bt_main.py 
-    #command: uwsgi --socket app:8000 --module acd_app.wsgi --master --enable-threads                        
-    #stdin_open: true
-    #tty: true
-    #command: tail -f /dev/null
-    #ports:
-    #  - '8000:8000'
-    #networks:
-    #  - sicalc     
-    #depends_on:
-    #  - serpro
-    #  - api
-    #restart: on-failure
+      dockerfile: ./dockerfile.revise
     volumes:
-      - ./revise:/revise
-      #- static_data:/app/static     
+      - ./revise:/revise         
     env_file:
       - ./env/revise.env
 
-
-#networks:
-#  prod:
-
-#volumes:
-#  static_data:    
+  pgadmin4:
+    image: dpage/pgadmin4:8.4
+    container_name: pgadmin4
+    ports:
+      - "15432:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: api@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    
 

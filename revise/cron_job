@@ -1,2 +1,2 @@
 #*/5 * * * * /revise/run_verificar_data.sh >> /revise/verificar_data.log 2>&1
-0 8 * * * /revise/run_verificar_data.sh >> /revise/rotina_diaria.log 2>&1
+0 8 * * * /revise/run_verificar_data.sh >> /revise/pnep.log 2>&1

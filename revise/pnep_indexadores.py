@@ -46,12 +46,8 @@ class Indexadores:
                         data_final = nova_data_final
                     else:
                         data_inicial = self.datetools.incrementa_mes_str(data_inicial)
-                        data_final = data_inicial                    
-
-                    #print(f"\n[indexador]: {indexador}")
-                    #print(f"[data inicial de busca indexador bcb]: {data_inicial}")
-                    #print(f"[data final de busca]: {data_final}")
-                
+                        data_final = data_inicial
+                    
                     resposta = self.apibcb.consultar_bc_periodo(codigo, data_inicial, data_final)
                     if resposta:
                         if indexador == 'TR':
@@ -100,24 +96,18 @@ class Indexadores:
                 if item_sub[0].lower() in item_lista:
                     lista_atualizacao.append([item_sub[0],item_sub[1],item_sub[2],item_lista[0]])
 
-        #print(f"\nlista atualizacao: {lista_atualizacao}\n")
         tabelas_indexador_atualizadas =[]
         if lista_atualizacao:
-
             for registro in lista_atualizacao:
-
                 nome_indexador = registro[0]
                 tabela = nome_indexador.lower()
                 dt_formatada = self.datetools.formatar_dmy_para_ymd(registro[1])        
                 valor = registro[2]
-                codigotab = registro[3]
-                
-                indice_inserido=self.tabelas.inserir_indice_bcb(dt_formatada, valor, tabela)
-                    
+                codigotab = registro[3]                
+                indice_inserido=self.tabelas.inserir_indice_bcb(dt_formatada, valor, tabela)                    
                 if indice_inserido:
                     tabelas_indexador_atualizadas.append(indice_inserido)
                     self.tabelas.zerar_processar(codigotab,dt_formatada)
-
             return tabelas_indexador_atualizadas
         return None
 
@@ -126,25 +116,32 @@ class Indexadores:
         print("="*20+" LOG DE EVENTOS "+"="*24)
         print(f"{self.datetools.dia_de_hoje().strftime('%d/%m/%Y %H:%M:%S')}\n")       
         
-        # obter as datas de atualizacao das tabelas [('inpc', 100, '2024-03-01', 7),...]        
+        ''' tabela_codigo_data_indexador eh uma lista de tuplas com as datas de atualizacao das tabelas
+            [('inpc', 100, '2024-03-01', 7),...] '''        
         tabela_codigo_data_indexador = self.tabelas.obter_datas_atualizacao_tabelas()
+        
 
-        ''' atualizar a tabela logatualizacao com os valores dessas datas
-        registros = [('inpc', '2024-03-01'), ('ipca', '2024-03-01'), ... , ('t202_tabela_pnep', '2021-12-01')] '''
+        ''' _registros recebe uma lista de tuplas com nome da tabela e o ultimo registro de data de cada
+            tabela atualizada em logatualizacao
+            registros = [('inpc', '2024-03-01'), 
+                         ('ipca', '2024-03-01'), ... , 
+                         ('t202_tabela_pnep', '2021-12-01')] '''
         _registros = self.tabelas.atualizar_datas_logatualizacao(tabela_codigo_data_indexador)
         
         # marcar tabelas para atualizacao        
         tabelas_marcadas_atualizacao = self.tabelas.marcar_tabelas_para_atualizacao(self.datetools.dia_de_hoje())        
+        #print(f"tabelas marcadas para atualizaçao: {tabelas_marcadas_atualizacao}")
+
         if tabelas_marcadas_atualizacao:
-            # incluir dois registro em cada tupla da lista (nome da tabela e codigo do indexador)
+            # incluir dois registros em cada tupla da lista (nome da tabela e codigo do indexador)
             tab_marcadas_merge = Indexadores.agregar(tabela_codigo_data_indexador,
-                                                               tabelas_marcadas_atualizacao)
+                                                     tabelas_marcadas_atualizacao)
             if tab_marcadas_merge:
                 # retirar da lista de tabelas_para_processar as tabelas que nao sao de indexadores
                 filtrar_tabelas_indexadores = [tupla for tupla in tab_marcadas_merge if tupla[0] < 200]
                 
                 if filtrar_tabelas_indexadores:
-                    print(f'tabelas de indexadores para atualizar:')
+                    print(f'Tabelas de indexadores para atualizar:')
                     for registro in filtrar_tabelas_indexadores:
                         print(registro)                     
 

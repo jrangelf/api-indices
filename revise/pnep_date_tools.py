@@ -2,9 +2,7 @@ from datetime import datetime, timedelta
 
 class DateTools:
 
-
-    @staticmethod
-    def dia_de_hoje():
+    def dia_de_hoje(self):
         return datetime.now()
     
     def formatar_data_str_ymd(self,data):
@@ -27,8 +25,42 @@ class DateTools:
         nova_data = f"{partes[2]}-{partes[1]}-{partes[0]}"
         return nova_data
 
+    def verificar_data_atualizacao(self, codigo, data_atual, data_log):
+        ''' 1. atualiza o campo processar para 1 caso a diferença de meses entre a data atual e a 
+            data da ultima atualizacao de cada tabela de indexadores for maior ou igual a 2
+            2. atualiza o campo processar para 1 caso a diferenca de meses entre a data atual e a 
+            data da ultima atualizacao de cada tabela de indices pnep for maior ou igual a 1
+            3. caso as datas estejam em anos diferentes o campo processar eh atualizado para 1
+        '''
+        # print(f"\n====================================")
+        # print(f"codigo:{codigo}\ndata_atual:{data_atual}\ndata_log:{data_log}")
+        # print(f"\n====================================")
 
+        if (data_atual.year > data_log.year):
+            return True        
+        elif codigo < 200 and (data_atual.month - data_log.month >=2):
+            #print(f"(1xx) mes atual - mes log = {data_atual.month - data_log.month}")
+            return True        
+        elif codigo >= 200 and codigo < 300 and (data_atual.month - data_log.month >=1):
+            #print(f"(2xx) mes atual - mes log = {data_atual.month - data_log.month}")
+            return True
+        elif codigo >= 300 and codigo < 400 and (data_atual.month - data_log.month >=1):
+            #print(f"(2xx) mes atual - mes log = {data_atual.month - data_log.month}")
+            return True        
+        return False
 
+    def incrementa_mes_obj(self, data):
+        ''' converte 2023-07-01 00:00:00+0000 em 2023-08-01 00:00:00+0000'''    
+        if data is not None:        
+            ano = data.year + (data.month + 1) // 12
+            mes = (data.month + 1) % 12
+            if mes == 0:
+                mes = 12
+                ano -= 1       
+            dia = min(data.day, (data.replace(month=mes, year=ano) - timedelta(days=1)).day)        
+            data_incrementada = data.replace(year=ano, month=mes, day=1)        
+            return data_incrementada
+    
 
 
 
@@ -40,25 +72,6 @@ class DateTools:
     def formatar_data_inicio_mes(data):
         return data.strftime("01/%m/%Y")
 
-    def verificar_data_atualizacao(self, codigo, data_atual, data_log):
-        ''' 1. atualiza o campo processar para 1 caso a diferença de meses entre a data atual e a 
-            data da ultima atualizacao de cada tabela de indexadores for maior ou igual a 2
-            2. atualiza o campo processar para 1 caso a diferenca de meses entre a data atual e a 
-            data da ultima atualizacao de cada tabela de indices pnep for maior ou igual a 1
-            3. caso as datas estejam em anos diferentes o campo processar eh atualizado para 1
-        '''
-        if (data_atual.year > data_log.year):
-            return True
-        
-        elif codigo < 200 and (data_atual.month - data_log.month >=2):
-            #print(f"(1xx) mes atual - mes log = {data_atual.month - data_log.month}")
-            return True
-        
-        elif codigo >= 200 and (data_atual.month - data_log.month <2):
-            print(f"(2xx) mes atual - mes log = {data_atual.month - data_log.month}")
-            return True
-        
-        return False
 
 
     
@@ -96,15 +109,6 @@ class DateTools:
         data_obj = datetime.strptime(data_str, "%d/%m/%Y")
         return data_obj
 
-    def incrementa_mes(data):
-        ''' converte 2023-07-01 00:00:00+0000 em 2023-08-01 00:00:00+0000'''    
-        if data is not None:        
-            ano = data.year + (data.month + 1) // 12
-            mes = (data.month + 1) % 12
-            if mes == 0:
-                mes = 12       
-            dia = min(data.day, (data.replace(month=mes, year=ano) - timedelta(days=1)).day)        
-            data_incrementada = data.replace(year=ano, month=mes, day=1)        
-            return data_incrementada
         
+    
     

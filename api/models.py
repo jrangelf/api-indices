@@ -59,8 +59,7 @@ class Igpm(Base):
     data = Column(DateTime(True))
     valor = Column(Numeric)    
 
-class LogAtualizacao(Base):
-    ''' armazena os registros de atualização das tabelas '''
+class LogAtualizacao(Base):    
     __tablename__ = 'logatualizacao'
 
     id = Column(BigInteger, primary_key=True)
@@ -321,9 +320,11 @@ class T236TabelaPnep(Base):
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
-    selic = Column(Numeric)
-    selic_ac_mes_atualiza = Column(Numeric)
-    selic_ac_mensal = Column(Numeric)
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
     
 
 class T300Juros(Base):
@@ -378,6 +379,15 @@ class T310Juros(Base):
     data = Column(DateTime(True))
     juros_mensal = Column(Numeric)
     juros_acumulados = Column(Numeric)
+
+class T312Selic(Base):
+    __tablename__ = 't312_selic'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    selic = Column(Numeric)
+    selic_acumulada = Column(Numeric)
+    selic_acumulada_mensal = Column(Numeric)
 
 
 class T400Tabela(Base):
