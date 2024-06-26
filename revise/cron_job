@@ -1,6 +1,8 @@
 #*/5 * * * * /revise/run_verificar_data.sh >> /revise/verificar_data.log 2>&1
 0 8 * * * /revise/run_verificar_data.sh >> /revise/pnep.log 2>&1
 
+# Fazer backup toda sexta-feira às 7 horas da manhã
+0 7 * * * root docker exec -i db-api sh -c "pg_dump -U postgres indices > /db/backup/indices_$(date '+%d-%m-%Y_%H%M%S').sql"
 
 # Copiar o arquivo mais recente do backup toda sexta-feira às 8h30 da manhã
 30 8 * * * root docker cp db-api:/db/backup/$(docker exec db-api ls -t /db/backup/ | head -n 1) ~/api-dev/api/backup/
