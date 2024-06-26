@@ -60,12 +60,7 @@ class Indexadores:
                             valor = resposta[0]['valor']
                             data = resposta[0]['data']
                             del indexes[indexador]
-                        
-                        #data_retorno = data                    
-                        #print(f"[data inicial resposta bcb]: {data_inicial}")
-                        #print(f"[data final resposta bcb]: {data_retorno}")
-                        #print(f"[valor]: {valor}")
-                        
+                                                                       
                         indexadores_do_mes.append([indexador, data, valor, data_inicial])        
         return indexadores_do_mes, lista
     
@@ -130,8 +125,7 @@ class Indexadores:
         
         # marcar tabelas para atualizacao        
         tabelas_marcadas_atualizacao = self.tabelas.marcar_tabelas_para_atualizacao(self.datetools.dia_de_hoje())        
-        #print(f"tabelas marcadas para atualizaçao: {tabelas_marcadas_atualizacao}")
-
+        
         if tabelas_marcadas_atualizacao:
             # incluir dois registros em cada tupla da lista (nome da tabela e codigo do indexador)
             tab_marcadas_merge = Indexadores.agregar(tabela_codigo_data_indexador,
