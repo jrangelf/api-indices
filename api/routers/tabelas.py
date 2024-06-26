@@ -108,29 +108,8 @@ async def log_atualizacao(db: Session = Depends(get_db)):
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
 
-# #---------------------------------------------------------------------
-# #TESTE DE FORMATAÇÃO DE DATAS
-# #---------------------------------------------------------------------
-# # Função para serialização personalizada de datas
-# def custom_json_serializer(obj):
-#     if isinstance(obj, datetime):
-#         #return obj.strftime('%Y-%m-%d')  # Formato de data desejado
-#         return obj.strftime('%d/%m/%Y')
-#     raise TypeError(f"Type {type(obj)} not serializable")
-
-# # Rota de exemplo
-# @router.get("/exemplo")
-# async def indexador_ipca(db: Session = Depends(get_db)):
-#      data_tabela = db.query(Ipca).all()
-#      if data_tabela is not None:
-#         data_formatada = [{"data": custom_json_serializer(item.data), "valor": item.valor, "id": item.id} for item in data_tabela]
-#         return data_formatada
-#      raise HTTPException(status_code=404, detail=NOREGS)
-# #----------------------------------------------------------------------
-
 
 # *** TABELA DE INDEXADORES DO BANCO CENTRAL ***
-
 # IPCA
 @router.get("/ipca/{mes}/{ano}")
 async def buscar_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
@@ -1285,66 +1264,6 @@ async def t312_juros(db: Session = Depends(get_db)):
          data_tabela = list(map(formatar_data, data_tabela))
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
-
-
-# @router.get("/inventario")
-# async def inventario(db: Session = Depends(get_db)):
-#     data_tabela = db.query(C01tabelainventario).all()
-#     if data_tabela is not None:
-#         return data_tabela
-#     raise HTTPException(status_code=404, detail=NOREGS)
-
-"""
-@router.get("/inventario/")
-async def busca_obs_pelo_codigo_tabela(codigo_tabela: int = Path(gt=0,lt=30),
-                        db: Session = Depends(get_db)):
-        
-        data_tabela = db.query(C01tabelainventario.C01_NOME_TABELA,C01tabelainventario.C01_OBS_TABELA).filter(C01tabelainventario.C01_CODIGO == codigo_tabela).first()
-        if data_tabela is not None:
-            return data_tabela
-        raise HTTPException(status_code=404, detail=NOREGS)
-"""
-    
-
-# @router.get("/codigo_tabela/{nome_tabela}")
-# async def busca_codigo_tabela_pelo_titulo(nome_tabela: str,
-#                         db: Session = Depends(get_db)):
-#         data = db.query(C01tabelainventario).filter(C01tabelainventario.C01_NOME_TABELA == nome_tabela).first()
-#         if data is not None:
-#             return data
-#         raise HTTPException(status_code=404, detail=NOREGS)
-
-
-# @router.get("/tabela/{tabela_cod}")
-# async def busca_tabela_pelo_codigo_tabela(tabela_cod: int = Path(gt=0,lt=30),
-#                         db: Session = Depends(get_db)):
-#         tabela = ajusta_nome_tabela(tabela_cod)
-        
-#         data_tabela = db.query(eval(tabela)).all()
-#         if data_tabela is not None:
-#             return data_tabela
-#         raise HTTPException(status_code=404, detail=NOREGS)
-
-
-
-"""
-from sqlalchemy import create_engine
- 
-engine = create_engine('sqlite:///:memory:')
-result = engine.execute("SELECT * FROM users WHERE age >= :age", {'age': 21})
-for row in result:
-    print(row)
-
-
-from sqlalchemy.orm import Session
- 
-session = Session(bind=engine)
-result = session.execute("SELECT * FROM users WHERE age >= :age", {'age': 21})
-for row in result:
-    print(row)
-
-"""
-               
 
 
                
