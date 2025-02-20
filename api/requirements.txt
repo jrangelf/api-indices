@@ -1,0 +1,9 @@
+beautifulsoup4
+psycopg2-binary
+urllib3
+zeep
+sqlalchemy
+fastapi
+uvicorn[standard]
+#pydantic
+python-decouple

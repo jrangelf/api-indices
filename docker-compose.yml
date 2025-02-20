@@ -1,0 +1,46 @@
+
+services:
+
+  pgsqlapi:
+    container_name: db-api
+    build:
+      context: ./pgsqlapi
+      dockerfile: dockerfile.pgsqlapi
+    ports:
+      - '5438:5432'
+    networks:
+      - siscalc
+      #- indice
+    restart: always  
+    volumes:
+      - ./pgsqlapi/db:/var/lib/postgresql/data      
+    env_file:
+      - ./env/pgsqlapi.env
+
+   
+  api:
+    container_name: api-indice
+    build:
+      context: ./api
+      dockerfile: ./dockerfile.api         
+    ports:
+      - '8004:8004'
+    networks:
+      - siscalc
+      #- indice
+    #depends_on:
+    #  - pgsql2
+    restart: on-failure
+    volumes:
+      - ./api:/api          
+    #env_file:
+    #  - ./env/api.env 
+
+
+networks:
+  #indice:
+  siscalc:
+    external: true
+
+#volumes:
+#  static_data:    

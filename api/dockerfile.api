@@ -1,0 +1,22 @@
+FROM ubuntu:focal 
+
+WORKDIR /api
+
+COPY ./requirements.txt .
+
+
+RUN apt update -y
+RUN apt upgrade -y
+
+RUN apt install build-essential python3 -y
+RUN apt install python-dev -y
+
+RUN apt install python3-pip -y
+
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN python3 --version
+
+COPY . .
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8004", "--reload"]
+
