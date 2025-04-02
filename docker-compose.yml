@@ -6,6 +6,7 @@ services:
     build:
       context: ./pgsqlapi
       dockerfile: dockerfile.pgsqlapi
+    #image: siscal/pgsqlapi:latest
     ports:
       - '5438:5432'
     networks:
@@ -22,7 +23,8 @@ services:
     container_name: api-indice
     build:
       context: ./api
-      dockerfile: ./dockerfile.api         
+      dockerfile: ./dockerfile.api
+    #image: siscalc/api-indice:latest         
     ports:
       - '8004:8004'
     networks:
