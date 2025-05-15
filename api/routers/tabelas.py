@@ -355,6 +355,21 @@ async def indexador_selic_copom(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
+#SELIC Acumulada
+@router.get("/selic_acumulada/{mes}/{ano}")
+async def buscar_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+     data_tabela = (db.query(T312Selic)
+                      .filter(extract('year', T312Selic.data) == ano, extract('month', T312Selic.data) == mes)
+                      .first()
+                      )
+     if data_tabela is not None:
+        formatar_data(data_tabela)
+        return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
 # IGPM
 @router.get("/igpm/{mes}/{ano}")
 async def buscar_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
