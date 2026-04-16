@@ -2,7 +2,7 @@
 services:
 
   pgsqlapi:
-    container_name: db-api
+    container_name: pgsqlapi
     build:
       context: ./pgsqlapi
       dockerfile: dockerfile.pgsqlapi

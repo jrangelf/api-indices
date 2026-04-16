@@ -1,3 +1,5 @@
+postgres/db/
+
 # Django #
 *.log
 *.pot
