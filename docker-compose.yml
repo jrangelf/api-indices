@@ -6,15 +6,15 @@ services:
     build:
       context: ./pgsqlapi
       dockerfile: dockerfile.pgsqlapi
-    #image: siscal/pgsqlapi:latest
+    image: pgsqlapi:latest
     ports:
       - '5438:5432'
     networks:
-      - siscalc
-      #- indice
+      - indices
     restart: always  
     volumes:
-      - ./pgsqlapi/db:/var/lib/postgresql/data      
+      - ./pgsqlapi/db:/var/lib/postgresql/data
+      - ./pgsqlapi/backup:/db/backup      
     env_file:
       - ./env/pgsqlapi.env
 
@@ -24,25 +24,16 @@ services:
     build:
       context: ./api
       dockerfile: ./dockerfile.api
-    #image: siscalc/api-indice:latest         
+    image: api-indice:latest        
     ports:
       - '8004:8004'
     networks:
-      - siscalc
-      #- indice
-    #depends_on:
-    #  - pgsql2
+      - indices
     restart: on-failure
     volumes:
       - ./api:/api          
-    #env_file:
-    #  - ./env/api.env 
 
 
 networks:
-  #indice:
-  siscalc:
+  indices:
     external: true
-
-#volumes:
-#  static_data:    

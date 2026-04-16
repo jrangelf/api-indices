@@ -5,23 +5,59 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 metadata = Base.metadata
 
+class Selic(Base):
+    __tablename__ = 'selic'
 
-class TabelaIndexador(Base):
-    """ Classe base para tabelas de indexadores econômicos. """
-    __abstract__ = True
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    valor = Column(Numeric)
+    
+
+class SelicCopom(Base):
+    __tablename__ = 'seliccopom'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    valor = Column(Numeric)
+    
+
+class Tr(Base):
+    __tablename__ = 'tr'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    valor = Column(Numeric)
+    
+
+class Inpc(Base):
+    __tablename__ = 'inpc'
+
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
     valor = Column(Numeric)
 
-# Índexadores Econômicos do Banco Central 
-class Selic(TabelaIndexador): __tablename__ = 'selic'
-class SelicCopom(TabelaIndexador): __tablename__ = 'seliccopom'
-class Tr(TabelaIndexador): __tablename__ = 'tr'
-class Inpc(TabelaIndexador): __tablename__ = 'inpc'
-class Ipca(TabelaIndexador): __tablename__ = 'ipca'
-class Ipca15(TabelaIndexador): __tablename__ = 'ipca15'
-class Igpm(TabelaIndexador): __tablename__ = 'igpm'
 
+class Ipca(Base):
+    __tablename__ = 'ipca'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    valor = Column(Numeric)
+
+
+class Ipca15(Base):
+    __tablename__ = 'ipca15'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    valor = Column(Numeric)
+
+class Igpm(Base):
+    __tablename__ = 'igpm'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    valor = Column(Numeric)    
 
 class LogAtualizacao(Base):    
     __tablename__ = 'logatualizacao'
@@ -63,9 +99,9 @@ class Indexadores(Base):
     descricao = Column(String(100))
     
 
-# Tabelas PNEP 
-class TabelaPnep(Base):
-    __abstract__ = True
+class T200TabelaPnep(Base):
+    __tablename__ = 't200_tabela_pnep'
+
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
     indexador = Column(String(20))
@@ -75,36 +111,221 @@ class TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T200TabelaPnep(TabelaPnep): __tablename__ = 't200_tabela_pnep'
-class T202TabelaPnep(TabelaPnep): __tablename__ = 't202_tabela_pnep'
-class T204TabelaPnep(TabelaPnep): __tablename__ = 't204_tabela_pnep'
-class T206TabelaPnep(TabelaPnep): __tablename__ = 't206_tabela_pnep'
-class T208TabelaPnep(TabelaPnep): __tablename__ = 't208_tabela_pnep'
-class T210TabelaPnep(TabelaPnep): __tablename__ = 't210_tabela_pnep'
-class T212TabelaPnep(TabelaPnep): __tablename__ = 't212_tabela_pnep'
-class T214TabelaPnep(TabelaPnep): __tablename__ = 't214_tabela_pnep'
-class T216TabelaPnep(TabelaPnep): __tablename__ = 't216_tabela_pnep'
-class T218TabelaPnep(TabelaPnep): __tablename__ = 't218_tabela_pnep'
-class T220TabelaPnep(TabelaPnep): __tablename__ = 't220_tabela_pnep'
-class T222TabelaPnep(TabelaPnep): __tablename__ = 't222_tabela_pnep'
-class T224TabelaPnep(TabelaPnep): __tablename__ = 't224_tabela_pnep'
-class T226TabelaPnep(TabelaPnep): __tablename__ = 't226_tabela_pnep'
-class T228TabelaPnep(TabelaPnep): __tablename__ = 't228_tabela_pnep'
-class T230TabelaPnep(TabelaPnep): __tablename__ = 't230_tabela_pnep'
-class T232TabelaPnep(TabelaPnep): __tablename__ = 't232_tabela_pnep'
-class T234TabelaPnep(TabelaPnep): __tablename__ = 't234_tabela_pnep'
-class T236TabelaPnep(TabelaPnep): __tablename__ = 't236_tabela_pnep'
-#class T238TabelaPnep(TabelaPnep): __tablename__ = 't238_tabela_pnep'
-#class T240TabelaPnep(TabelaPnep): __tablename__ = 't240_tabela_pnep'
-    
-
-class TabelaJuros(Base):
-    __abstract__ = True
+class T202TabelaPnep(Base):
+    __tablename__ = 't202_tabela_pnep'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
-    juros_mensal = Column(Numeric)
-    juros_acumulados = Column(Numeric)
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T204TabelaPnep(Base):
+    __tablename__ = 't204_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T206TabelaPnep(Base):
+    __tablename__ = 't206_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T208TabelaPnep(Base):
+    __tablename__ = 't208_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)    
+
+
+class T210TabelaPnep(Base):
+    __tablename__ = 't210_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T212TabelaPnep(Base):
+    __tablename__ = 't212_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T214TabelaPnep(Base):
+    __tablename__ = 't214_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T216TabelaPnep(Base):
+    __tablename__ = 't216_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T218TabelaPnep(Base):
+    __tablename__ = 't218_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T220TabelaPnep(Base):
+    __tablename__ = 't220_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T222TabelaPnep(Base):
+    __tablename__ = 't222_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T224TabelaPnep(Base):
+    __tablename__ = 't224_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T226TabelaPnep(Base):
+    __tablename__ = 't226_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T228TabelaPnep(Base):
+    __tablename__ = 't228_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T230TabelaPnep(Base):
+    __tablename__ = 't230_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T232TabelaPnep(Base):
+    __tablename__ = 't232_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T234TabelaPnep(Base):
+    __tablename__ = 't234_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+        
+class T236TabelaPnep(Base):
+    __tablename__ = 't236_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+    
 
 class T300Juros(Base):
     __tablename__ = 't300_juros_poupanca'
@@ -115,12 +336,57 @@ class T300Juros(Base):
     taxa_mensal = Column(Numeric)
 
 
-class T302Juros(TabelaJuros): __tablename__ = 't302_juros'
-class T304Juros(TabelaJuros): __tablename__ = 't304_juros'
-class T306Juros(TabelaJuros): __tablename__ = 't306_juros'
-class T308Juros(TabelaJuros): __tablename__ = 't308_juros'
-class T310Juros(TabelaJuros): __tablename__ = 't310_juros'
+class T302Juros(Base):
+    __tablename__ = 't302_juros'
 
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+
+class T304Juros(Base):
+    __tablename__ = 't304_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+
+class T306Juros(Base):
+    __tablename__ = 't306_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+
+class T308Juros(Base):
+    __tablename__ = 't308_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+
+class T310Juros(Base):
+    __tablename__ = 't310_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T310JurosPnn(Base):
+    __tablename__ = 't310_juros_pnn'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
 
 class T312Selic(Base):
     __tablename__ = 't312_selic'
@@ -131,14 +397,139 @@ class T312Selic(Base):
     selic_acumulada = Column(Numeric)
     selic_acumulada_mensal = Column(Numeric)
 
+#==================================================
+# tabelas criadas para uso do credito - 27/3/2026
 
-class T400Tabela(Base):
-    __tablename__ = 'serie_historica_moedas'
+class T322Juros(Base):
+    __tablename__ = 't322_juros'
 
     id = Column(BigInteger, primary_key=True)
-    vigencia = Column(String(20))
-    moeda = Column(String(20))
-    alteracao = Column(String(150))
-    legislacao = Column(Text)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T324Juros(Base):
+    __tablename__ = 't324_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T326Juros(Base):
+    __tablename__ = 't326_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T328Juros(Base):
+    __tablename__ = 't328_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T330Juros(Base):
+    __tablename__ = 't330_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T332Selic(Base):
+    __tablename__ = 't332_selic'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    selic = Column(Numeric)
+    selic_acumulada = Column(Numeric)
+    selic_acumulada_mensal = Column(Numeric)
+
+class T334Selic(Base):
+    __tablename__ = 't334_selic'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    selic = Column(Numeric)
+    selic_acumulada = Column(Numeric)
+    selic_acumulada_mensal = Column(Numeric)
 
 
+# tabelas criadas para uso do credito
+#===============================================
+
+
+
+# class T400Tabela(Base):
+#     __tablename__ = 'serie_historica_moedas'
+
+#     id = Column(BigInteger, primary_key=True)
+#     vigencia = Column(String(20))
+#     moeda = Column(String(20))
+#     alteracao = Column(String(150))
+#     legislacao = Column(Text)
+
+
+# inclusao das tabelas de creditos
+
+class T400TabelaPnep(Base):
+    __tablename__ = 't400_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T402TabelaPnep(Base):
+    __tablename__ = 't402_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T404TabelaPnep(Base):
+    __tablename__ = 't404_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T406TabelaPnep(Base):
+    __tablename__ = 't406_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+class T408TabelaPnep(Base):
+    __tablename__ = 't408_tabela_pnep'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)

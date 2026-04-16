@@ -6,10 +6,11 @@ from starlette import status
 from fastapi import APIRouter, Depends, HTTPException, Path, status, Query, Body
 from database import SessionLocal, engine
 from models import *
-from datetime import datetime
+from datetime import datetime, date
 
 from tools import *
 from constantes import NOREGS
+from debug import *
 
 router = APIRouter()
 
@@ -30,21 +31,44 @@ def validar_busca_por_periodo(model, mes_inicial, ano_inicial, mes_final, ano_fi
     if ano_inicial > ano_final or (ano_inicial == ano_final and mes_inicial > mes_final):
         raise HTTPException(status_code=400, detail="Período inválido: mês/ano inicial é maior que mês/ano final")
 
-    data_tabela = (
+    
+    data_inicial = date(ano_inicial, mes_inicial, 1)
+    data_final = date(ano_final, mes_final, 1)
+    
+    #info(f'Data inicial (objeto): {data_inicial}')
+    #info(f'Data final (objeto): {data_final}')
+    
+
+    query = (
         db.query(model)
         .filter(
-            and_(
-                extract('year', model.data) >= ano_inicial,
-                extract('month', model.data) >= mes_inicial
-            ),
-            and_(
-                extract('year', model.data) <= ano_final,
-                extract('month', model.data) <= mes_final
+            model.data >= data_inicial,
+            model.data <= data_final
             )
-        )
-        .order_by(model.data)
-        .all()
+            .order_by(model.data)        
     )
+    
+    #info(f'Query SQL: {str(query.statement.compile(compile_kwargs={"literal_binds": True}))}')
+
+    data_tabela = query.all()
+    #info(f'Total de registros no período: {len(data_tabela)}')
+
+    # data_tabela = (
+    #     db.query(model)
+    #     .filter(
+    #         and_(
+    #             extract('year', model.data) >= ano_inicial,
+    #             extract('month', model.data) >= mes_inicial
+    #         ),
+    #         and_(
+    #             extract('year', model.data) <= ano_final,
+    #             extract('month', model.data) <= mes_final
+    #         )
+    #     )
+    #     .order_by(model.data)
+    #     .all()
+    # )
+    
     if data_tabela:
         data_tabela = list(map(formatar_data, data_tabela))
         return data_tabela
@@ -86,6 +110,7 @@ async def indexadores(db: Session = Depends(get_db)):
     if any(indices):
         return indices
     raise HTTPException(status_code=404, detail=NOREGS)
+
 
 
 @router.get("/descricao_tabelas")
@@ -354,7 +379,6 @@ async def indexador_selic_copom(db: Session = Depends(get_db)):
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
 
-
 #SELIC Acumulada
 @router.get("/selic_acumulada/{mes}/{ano}")
 async def buscar_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
@@ -368,6 +392,9 @@ async def buscar_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
         formatar_data(data_tabela)
         return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
 
 
 # IGPM
@@ -557,13 +584,14 @@ async def t208_tabela_pnep_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=
        raise HTTPException(status_code=404, detail=NOREGS)
 
 @router.get("/t208_tabela_pnep/periodo")
-async def t206_tabela_pnep_buscar_por_periodo(
+async def t208_tabela_pnep_buscar_por_periodo(
     mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
     ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
     mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
     ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
     db: Session = Depends(get_db)
 ):
+
     return validar_busca_por_periodo(T208TabelaPnep, mes_inicial, ano_inicial, mes_final, ano_final, db)
 
 @router.get("/t208_tabela_pnep")
@@ -772,7 +800,8 @@ async def t220_tabela_pnep_buscar_por_periodo(
 
 @router.get("/t220_tabela_pnep")
 async def t220_tabela_pnep(db: Session = Depends(get_db)):
-     data_tabela = db.query(T220TabelaPnep).all()
+     data_tabela = db.query(T220TabelaPnep).order_by((T220TabelaPnep.data)).all()
+     #data_tabela = db.query(T220TabelaPnep).all()
      if data_tabela is not None:
          data_tabela = list(map(formatar_data, data_tabela))
          return data_tabela
@@ -1287,6 +1316,32 @@ async def t310_juros(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
+# TABELA t310 PNN - 
+# @router.get("/t310_juros_pnn/{mes}/{ano}")
+# async def t310_juros_pnn(mes: int = Path(title="Mês", gt=0,lt=13),
+#                                 ano: int = Path(title="Ano", gt=1900,lt=2100),
+#                                 db: Session = Depends(get_db)):
+#        data_tabela = (db.query(T310JurosPnn)
+#                       .filter(extract('year', T310JurosPnn.data) == ano, 
+#                               extract('month', T310JurosPnn.data) == mes)
+#                       .first()
+#                       )
+#        if data_tabela is not None:
+#             formatar_data(data_tabela)
+#             return data_tabela
+#        raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t310_juros_pnn")
+async def t310_juros_pnn(db: Session = Depends(get_db)):
+     data_tabela = db.query(T310JurosPnn).order_by(T310JurosPnn.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+
 # TABELA t312 - 
 @router.get("/t312_selic/{mes}/{ano}")
 async def t312_juros(mes: int = Path(title="Mês", gt=0,lt=13),
@@ -1324,6 +1379,471 @@ async def t312_selic(db: Session = Depends(get_db)):
          data_tabela = list(map(formatar_data, data_tabela))
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+
+# TABELAS DE CREDITOS
+
+# TABELA t322 - 
+@router.get("/t322_juros/{mes}/{ano}")
+async def t322_juros(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T322Juros)
+                      .filter(extract('year', T322Juros.data) == ano, 
+                              extract('month', T322Juros.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t322_juros/periodo")
+async def t322_juros_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T322Juros,
+                                     mes_inicial,
+                                     ano_inicial,
+                                     mes_final,
+                                     ano_final,
+                                     db)
+
+@router.get("/t322_juros")
+async def t322_juros(db: Session = Depends(get_db)):
+     data_tabela = db.query(T322Juros).order_by(T322Juros.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+# TABELA t324 -  
+@router.get("/t324_juros/{mes}/{ano}")
+async def t324_juros(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T324Juros)
+                      .filter(extract('year', T324Juros.data) == ano, 
+                              extract('month', T324Juros.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t324_juros/periodo")
+async def t324_juros_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T324Juros,
+                                     mes_inicial,
+                                     ano_inicial,
+                                     mes_final,
+                                     ano_final,
+                                     db)
+
+@router.get("/t324_juros")
+async def t324_juros(db: Session = Depends(get_db)):
+     data_tabela = db.query(T324Juros).order_by(T324Juros.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+# TABELA t326 - 
+@router.get("/t326_juros/{mes}/{ano}")
+async def t326_juros(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T326Juros)
+                      .filter(extract('year', T326Juros.data) == ano, 
+                              extract('month', T326Juros.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t326_juros/periodo")
+async def t326_juros_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T326Juros,
+                                     mes_inicial,
+                                     ano_inicial,
+                                     mes_final,
+                                     ano_final,
+                                     db)
+
+@router.get("/t326_juros")
+async def t326_juros(db: Session = Depends(get_db)):
+     data_tabela = db.query(T326Juros).order_by(T326Juros.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+# TABELA t328 - 
+@router.get("/t328_juros/{mes}/{ano}")
+async def t328_juros(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T328Juros)
+                      .filter(extract('year', T328Juros.data) == ano, 
+                              extract('month', T328Juros.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t328_juros/periodo")
+async def t328_juros_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T328Juros,
+                                     mes_inicial,
+                                     ano_inicial,
+                                     mes_final,
+                                     ano_final,
+                                     db)
+
+@router.get("/t328_juros")
+async def t328_juros(db: Session = Depends(get_db)):
+     data_tabela = db.query(T328Juros).order_by(T328Juros.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+# TABELA t330 - 
+@router.get("/t330_juros/{mes}/{ano}")
+async def t330_juros(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T330Juros)
+                      .filter(extract('year', T330Juros.data) == ano, 
+                              extract('month', T330Juros.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t330_juros/periodo")
+async def t330_juros_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T330Juros,
+                                     mes_inicial,
+                                     ano_inicial,
+                                     mes_final,
+                                     ano_final,
+                                     db)
+
+@router.get("/t330_juros")
+async def t330_juros(db: Session = Depends(get_db)):
+     data_tabela = db.query(T330Juros).order_by(T330Juros.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+
+
+# TABELA t332 - 
+@router.get("/t332_selic/{mes}/{ano}")
+async def t332_juros(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T332Selic)
+                      .filter(extract('year', T332Selic.data) == ano, 
+                              extract('month', T332Selic.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t332_selic/periodo")
+async def t332_selic_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T332Selic,
+                                     mes_inicial,
+                                     ano_inicial,
+                                     mes_final,
+                                     ano_final,
+                                     db)
+
+@router.get("/t332_selic")
+async def t332_selic(db: Session = Depends(get_db)):
+     data_tabela = db.query(T332Selic).order_by(T332Selic.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+
+# TABELA t334 - 
+@router.get("/t334_selic/{mes}/{ano}")
+async def t334_juros(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T334Selic)
+                      .filter(extract('year', T334Selic.data) == ano, 
+                              extract('month', T334Selic.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t334_selic/periodo")
+async def t334_selic_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T334Selic,
+                                     mes_inicial,
+                                     ano_inicial,
+                                     mes_final,
+                                     ano_final,
+                                     db)
+
+@router.get("/t334_selic")
+async def t334_selic(db: Session = Depends(get_db)):
+     data_tabela = db.query(T334Selic).order_by(T334Selic.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+
+
+# TABELA t400 - 
+@router.get("/t400_tabela_pnep/{mes}/{ano}")
+async def t400_tabela_pnep_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T400TabelaPnep)
+                      .filter(extract('year', T400TabelaPnep.data) == ano, 
+                              extract('month', T400TabelaPnep.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t400_tabela_pnep/periodo")
+async def t400_tabela_pnep_buscar_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T400TabelaPnep, mes_inicial, ano_inicial, mes_final, ano_final, db)
+
+@router.get("/t400_tabela_pnep")
+async def t400_tabela_pnep(db: Session = Depends(get_db)):
+     data_tabela = db.query(T400TabelaPnep).order_by(T400TabelaPnep.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+# TABELA t402 - 
+@router.get("/t402_tabela_pnep/{mes}/{ano}")
+async def t402_tabela_pnep_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T402TabelaPnep)
+                      .filter(extract('year', T402TabelaPnep.data) == ano, 
+                              extract('month', T402TabelaPnep.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t402_tabela_pnep/periodo")
+async def t402_tabela_pnep_buscar_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T402TabelaPnep, mes_inicial, ano_inicial, mes_final, ano_final, db)
+
+@router.get("/t402_tabela_pnep")
+async def t402_tabela_pnep(db: Session = Depends(get_db)):
+     data_tabela = db.query(T402TabelaPnep).order_by(T402TabelaPnep.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+# TABELA t404 - 
+@router.get("/t404_tabela_pnep/{mes}/{ano}")
+async def t404_tabela_pnep_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T404TabelaPnep)
+                      .filter(extract('year', T404TabelaPnep.data) == ano, 
+                              extract('month', T404TabelaPnep.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=404, detail=NOREGS)
+
+@router.get("/t404_tabela_pnep/periodo")
+async def t404_tabela_pnep_buscar_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T404TabelaPnep, mes_inicial, ano_inicial, mes_final, ano_final, db)
+
+@router.get("/t404_tabela_pnep")
+async def t404_tabela_pnep(db: Session = Depends(get_db)):
+     data_tabela = db.query(T404TabelaPnep).order_by(T404TabelaPnep.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=404, detail=NOREGS)
+
+
+
+# TABELA t406 - 
+@router.get("/t406_tabela_pnep/{mes}/{ano}")
+async def t406_tabela_pnep_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T406TabelaPnep)
+                      .filter(extract('year', T406TabelaPnep.data) == ano, 
+                              extract('month', T406TabelaPnep.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=406, detail=NOREGS)
+
+@router.get("/t406_tabela_pnep/periodo")
+async def t406_tabela_pnep_buscar_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T406TabelaPnep, mes_inicial, ano_inicial, mes_final, ano_final, db)
+
+@router.get("/t406_tabela_pnep")
+async def t406_tabela_pnep(db: Session = Depends(get_db)):
+     data_tabela = db.query(T406TabelaPnep).order_by(T406TabelaPnep.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=406, detail=NOREGS)
+
+
+
+# TABELA t408 - 
+@router.get("/t408_tabela_pnep/{mes}/{ano}")
+async def t408_tabela_pnep_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
+                                ano: int = Path(title="Ano", gt=1900,lt=2100),
+                                db: Session = Depends(get_db)):
+       data_tabela = (db.query(T408TabelaPnep)
+                      .filter(extract('year', T408TabelaPnep.data) == ano, 
+                              extract('month', T408TabelaPnep.data) == mes)
+                      .first()
+                      )
+       if data_tabela is not None:
+            formatar_data(data_tabela)
+            return data_tabela
+       raise HTTPException(status_code=408, detail=NOREGS)
+
+@router.get("/t408_tabela_pnep/periodo")
+async def t408_tabela_pnep_buscar_por_periodo(
+    mes_inicial: int = Query(..., title="Mês inicial", gt=0, lt=13),
+    ano_inicial: int = Query(..., title="Ano inicial", gt=1900, lt=2100),
+    mes_final: int = Query(..., title="Mês final", gt=0, lt=13),
+    ano_final: int = Query(..., title="Ano final", gt=1900, lt=2100),
+    db: Session = Depends(get_db)
+):
+    return validar_busca_por_periodo(T408TabelaPnep, mes_inicial, ano_inicial, mes_final, ano_final, db)
+
+@router.get("/t408_tabela_pnep")
+async def t408_tabela_pnep(db: Session = Depends(get_db)):
+     data_tabela = db.query(T408TabelaPnep).order_by(T408TabelaPnep.data).all()
+     if data_tabela is not None:
+         data_tabela = list(map(formatar_data, data_tabela))
+         return data_tabela
+     raise HTTPException(status_code=408, detail=NOREGS)
+
+
 
 
 # @router.get("/inventario")

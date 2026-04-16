@@ -1,0 +1,22 @@
+# 1. Criar banco usando template0 (evita erro de collation)
+
+docker exec db-postgres psql -U postgres -c "DROP DATABASE IF EXISTS indices;"
+docker exec db-postgres psql -U postgres -c "CREATE DATABASE indices TEMPLATE template0;"
+
+# 2. Restaurar backup
+docker exec -i db-postgres psql -U postgres -d indices < indices_2025-12-10_135557.sql
+
+
+
+
+
+
+
+
+
+docker exec -i db-api psql -U postgres -d indices < /home/rangel/prd_agu/novo-siscalc/backup-db/api-indice/indices_2025-12-10_135557.sql
+
+docker exec db-api psql -U postgres -c "DROP DATABASE IF EXISTS indices;"
+docker exec db-api psql -U postgres -c "ALTER DATABASE template1 REFRESH COLLATION VERSION;"
+docker exec db-api psql -U postgres -c "CREATE DATABASE indices;"
+

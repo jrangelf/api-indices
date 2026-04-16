@@ -2,6 +2,10 @@ FROM postgres:15.3
 
 WORKDIR /db
 
+# Cria a pasta de backup dentro do container
+RUN mkdir -p /db/backup && chown -R postgres:postgres /db
+
+
 #RUN mkdir backup
 
 #COPY indexadores_backup_19.5.2023 .   
