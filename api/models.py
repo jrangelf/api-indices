@@ -99,8 +99,8 @@ class Indexadores(Base):
     descricao = Column(String(100))
     
 
-class T200TabelaPnep(Base):
-    __tablename__ = 't200_tabela_pnep'
+class T200TabelaPnrj(Base):
+    __tablename__ = 't200_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -111,8 +111,8 @@ class T200TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T202TabelaPnep(Base):
-    __tablename__ = 't202_tabela_pnep'
+class T202TabelaPnrj(Base):
+    __tablename__ = 't202_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -123,8 +123,8 @@ class T202TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T204TabelaPnep(Base):
-    __tablename__ = 't204_tabela_pnep'
+class T204TabelaPnrj(Base):
+    __tablename__ = 't204_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -135,8 +135,8 @@ class T204TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T206TabelaPnep(Base):
-    __tablename__ = 't206_tabela_pnep'
+class T206TabelaPnrj(Base):
+    __tablename__ = 't206_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -147,8 +147,8 @@ class T206TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T208TabelaPnep(Base):
-    __tablename__ = 't208_tabela_pnep'
+class T208TabelaPnrj(Base):
+    __tablename__ = 't208_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -159,8 +159,8 @@ class T208TabelaPnep(Base):
     indice_correcao = Column(Numeric)    
 
 
-class T210TabelaPnep(Base):
-    __tablename__ = 't210_tabela_pnep'
+class T210TabelaPnrj(Base):
+    __tablename__ = 't210_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -171,8 +171,8 @@ class T210TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T212TabelaPnep(Base):
-    __tablename__ = 't212_tabela_pnep'
+class T212TabelaPnrj(Base):
+    __tablename__ = 't212_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -183,8 +183,8 @@ class T212TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T214TabelaPnep(Base):
-    __tablename__ = 't214_tabela_pnep'
+class T214TabelaPnrj(Base):
+    __tablename__ = 't214_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -195,8 +195,8 @@ class T214TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T216TabelaPnep(Base):
-    __tablename__ = 't216_tabela_pnep'
+class T216TabelaPnrj(Base):
+    __tablename__ = 't216_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -207,8 +207,8 @@ class T216TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T218TabelaPnep(Base):
-    __tablename__ = 't218_tabela_pnep'
+class T218TabelaPnrj(Base):
+    __tablename__ = 't218_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -219,8 +219,8 @@ class T218TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T220TabelaPnep(Base):
-    __tablename__ = 't220_tabela_pnep'
+class T220TabelaPnrj(Base):
+    __tablename__ = 't220_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -231,8 +231,8 @@ class T220TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T222TabelaPnep(Base):
-    __tablename__ = 't222_tabela_pnep'
+class T222TabelaPnrj(Base):
+    __tablename__ = 't222_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -243,8 +243,8 @@ class T222TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T224TabelaPnep(Base):
-    __tablename__ = 't224_tabela_pnep'
+class T224TabelaPnrj(Base):
+    __tablename__ = 't224_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -255,8 +255,8 @@ class T224TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T226TabelaPnep(Base):
-    __tablename__ = 't226_tabela_pnep'
+class T226TabelaPnrj(Base):
+    __tablename__ = 't226_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -267,8 +267,8 @@ class T226TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T228TabelaPnep(Base):
-    __tablename__ = 't228_tabela_pnep'
+class T228TabelaPnrj(Base):
+    __tablename__ = 't228_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -279,8 +279,8 @@ class T228TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T230TabelaPnep(Base):
-    __tablename__ = 't230_tabela_pnep'
+class T230TabelaPnrj(Base):
+    __tablename__ = 't230_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -291,8 +291,8 @@ class T230TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T232TabelaPnep(Base):
-    __tablename__ = 't232_tabela_pnep'
+class T232TabelaPnrj(Base):
+    __tablename__ = 't232_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -303,8 +303,8 @@ class T232TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T234TabelaPnep(Base):
-    __tablename__ = 't234_tabela_pnep'
+class T234TabelaPnrj(Base):
+    __tablename__ = 't234_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -315,8 +315,8 @@ class T234TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
         
-class T236TabelaPnep(Base):
-    __tablename__ = 't236_tabela_pnep'
+class T236TabelaPnrj(Base):
+    __tablename__ = 't236_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -476,8 +476,8 @@ class T334Selic(Base):
 
 # inclusao das tabelas de creditos
 
-class T400TabelaPnep(Base):
-    __tablename__ = 't400_tabela_pnep'
+class T400TabelaPnrj(Base):
+    __tablename__ = 't400_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -488,8 +488,8 @@ class T400TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T402TabelaPnep(Base):
-    __tablename__ = 't402_tabela_pnep'
+class T402TabelaPnrj(Base):
+    __tablename__ = 't402_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -500,8 +500,8 @@ class T402TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T404TabelaPnep(Base):
-    __tablename__ = 't404_tabela_pnep'
+class T404TabelaPnrj(Base):
+    __tablename__ = 't404_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -512,8 +512,8 @@ class T404TabelaPnep(Base):
     indice_correcao = Column(Numeric)
 
 
-class T406TabelaPnep(Base):
-    __tablename__ = 't406_tabela_pnep'
+class T406TabelaPnrj(Base):
+    __tablename__ = 't406_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -523,8 +523,8 @@ class T406TabelaPnep(Base):
     fator_vigente = Column(Numeric)
     indice_correcao = Column(Numeric)
 
-class T408TabelaPnep(Base):
-    __tablename__ = 't408_tabela_pnep'
+class T408TabelaPnrj(Base):
+    __tablename__ = 't408_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
