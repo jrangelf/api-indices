@@ -1,3 +1,52 @@
+"""
+routers/tabelas.py
+==================
+Router principal da API de Índices PNRJ.
+
+Responsabilidade:
+    Define todos os endpoints HTTP GET da API, organizados em três grupos:
+
+    1. Indexadores BCB  — dados brutos coletados da API SGS/BCB
+       Rotas: /bcb, /ipca, /ipca15, /inpc, /tr, /selic, /seliccopom,
+              /selic_acumulada, /igpm, /indexadores, /logatualizacao,
+              /descricao_tabelas, /nome_tabelas
+
+    2. Índices PNRJ (200–299, 400–499) — índices de correção monetária calculados
+       Rotas: /t200_tabela_pnrj … /t408_tabela_pnrj
+
+    3. Juros (300–399) — taxas de juros mensais e acumuladas
+       Rotas: /t300_juros_poupanca … /t334_selic
+
+Padrão de rotas:
+    Cada grupo de tabela disponibiliza 3 variantes de consulta:
+        GET /{tabela}                — retorna todos os registros
+        GET /{tabela}/{mes}/{ano}    — retorna o registro do mês/ano
+        GET /{tabela}/periodo        — retorna um intervalo de meses (query params)
+
+    Parâmetros de período:
+        mes_inicial, ano_inicial, mes_final, ano_final (Query params)
+
+Tratamento de erros:
+    - 400 Bad Request  — período inválido (inicio > fim)
+    - 404 Not Found    — nenhum registro encontrado (NOREGS)
+
+Formatação de datas:
+    Todos os retornos formatam o campo `data` para 'DD/MM/YYYY' antes
+    de serializar a resposta, via a função `formatar_data`.
+
+Injeção de sessão:
+    O banco é injetado por requisição via `get_db()` (Depends),
+    garantindo que cada request abra e feche sua própria sessão.
+
+Dependências:
+    - fastapi
+    - sqlalchemy
+    - models.py      (todos os modelos ORM)
+    - constantes.py  (NOREGS)
+    - tools.py       (ajusta_nome_tabela)
+    - debug.py       (logging)
+"""
+
 import json
 from sqlalchemy import extract, and_
 from sqlalchemy.orm import Session
@@ -13,6 +62,10 @@ from constantes import NOREGS
 from debug import *
 
 router = APIRouter()
+
+# ---------------------------------------------------------------------------
+# Dependência de sessão — injetada por requisição via FastAPI Depends
+# ---------------------------------------------------------------------------
 
 def get_db():
     db = SessionLocal()
@@ -51,23 +104,6 @@ def validar_busca_por_periodo(model, mes_inicial, ano_inicial, mes_final, ano_fi
     #info(f'Query SQL: {str(query.statement.compile(compile_kwargs={"literal_binds": True}))}')
 
     data_tabela = query.all()
-    #info(f'Total de registros no período: {len(data_tabela)}')
-
-    # data_tabela = (
-    #     db.query(model)
-    #     .filter(
-    #         and_(
-    #             extract('year', model.data) >= ano_inicial,
-    #             extract('month', model.data) >= mes_inicial
-    #         ),
-    #         and_(
-    #             extract('year', model.data) <= ano_final,
-    #             extract('month', model.data) <= mes_final
-    #         )
-    #     )
-    #     .order_by(model.data)
-    #     .all()
-    # )
     
     if data_tabela:
         data_tabela = list(map(formatar_data, data_tabela))
@@ -75,7 +111,7 @@ def validar_busca_por_periodo(model, mes_inicial, ano_inicial, mes_final, ano_fi
     
     raise HTTPException(status_code=404, detail=NOREGS)
 
-@router.get("/bcb")
+@router.get("/bcb", summary="Resumo dos últimos registros de todos os indexadores BCB")
 async def indexadores(db: Session = Depends(get_db)):
     indices = []
 
@@ -121,7 +157,7 @@ async def descricao_tabelas(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
-@router.get("/nome_tabelas")
+@router.get("/nome_tabelas", summary="código, nome e descrição de cada tabela")
 async def nome_e_codigo_das_tabelas(db: Session = Depends(get_db)):
      #data_tabela = db.query(DescricaoTabelas).order_by(DescricaoTabelas.codigo).all()
      data_tabela = db.query(
@@ -136,8 +172,8 @@ async def nome_e_codigo_das_tabelas(db: Session = Depends(get_db)):
         {
             "codigo": row.codigo,
             "nome": row.nome,
-            "descricao": row.descricao,
-            "observacao": row.observacao
+            "descricao": row.descricao
+            #"observacao": row.observacao
         } 
         for row in data_tabela
         ]
@@ -158,28 +194,12 @@ async def log_atualizacao(db: Session = Depends(get_db)):
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
 
-# #---------------------------------------------------------------------
-# #TESTE DE FORMATAÇÃO DE DATAS
-# #---------------------------------------------------------------------
-# # Função para serialização personalizada de datas
-# def custom_json_serializer(obj):
-#     if isinstance(obj, datetime):
-#         #return obj.strftime('%Y-%m-%d')  # Formato de data desejado
-#         return obj.strftime('%d/%m/%Y')
-#     raise TypeError(f"Type {type(obj)} not serializable")
 
-# # Rota de exemplo
-# @router.get("/exemplo")
-# async def indexador_ipca(db: Session = Depends(get_db)):
-#      data_tabela = db.query(Ipca).all()
-#      if data_tabela is not None:
-#         data_formatada = [{"data": custom_json_serializer(item.data), "valor": item.valor, "id": item.id} for item in data_tabela]
-#         return data_formatada
-#      raise HTTPException(status_code=404, detail=NOREGS)
-# #----------------------------------------------------------------------
-# listar em ordem decrescente: data_tabela = db.query(Ipca).order_by(desc(Ipca.data)).all() 
 
-# *** TABELA DE INDEXADORES DO BANCO CENTRAL ***
+# ===========================================================================
+# ENDPOINTS — INDEXADORES BCB
+# Retornam dados brutos das séries temporais do Banco Central do Brasil.
+# ===========================================================================
 
 # IPCA
 @router.get("/ipca/{mes}/{ano}")
@@ -394,9 +414,6 @@ async def buscar_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
-
-
-
 # IGPM
 @router.get("/igpm/{mes}/{ano}")
 async def buscar_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
@@ -430,10 +447,20 @@ async def indexador_ipca(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
-# *** TABELAS DE INDICES PNRJ ***
+# ===========================================================================
+# ENDPOINTS — TABELAS DE ÍNDICES DÉBITOS PNRJ (200–299)
+# Cada tabela disponibiliza: consulta por mês/ano, consulta por período
+# e retorno da série histórica completa.
+#
+# Nota: As funções de endpoints abaixo seguem padrão idêntico para todas
+# as tabelas TxxxTabelaPnrj. O padrão é:
+#   1. GET /{nome_tabela}/{mes}/{ano}  → registro único
+#   2. GET /{nome_tabela}/periodo      → intervalo via query params
+#   3. GET /{nome_tabela}              → série histórica completa
+# ===========================================================================
 
 # TABELA t200 - 
-@router.get("/t200_tabela_pnrj/{mes}/{ano}")
+@router.get("/t200_tabela_pnrj/{mes}/{ano}", summary="Tabela c.m. cond. geral IPCA-E")
 async def t200_tabela_pnrj_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
                                 ano: int = Path(title="Ano", gt=1900,lt=2100),
                                 db: Session = Depends(get_db)):
@@ -1079,8 +1106,17 @@ async def t236_tabela_pnrj(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
-
-# *** TABELAS DE JUROS ***
+# ===========================================================================
+# ENDPOINTS — TABELAS DE JUROS PNRJ (300–319 DÉBITOS, 320–399 CRÉDITOS) 
+# Cada tabela disponibiliza: consulta por mês/ano, consulta por período
+# e retorno da série histórica completa.
+#
+# Nota: As funções de endpoints abaixo seguem os modelos abaixo
+# as tabelas TxxxJuros, TxxJurosPnn, TxxSelic. O padrão é:
+#   1. GET /{nome_tabela}/{mes}/{ano}  → registro único
+#   2. GET /{nome_tabela}/periodo      → intervalo via query params
+#   3. GET /{nome_tabela}              → série histórica completa
+# ===========================================================================
 
 # TABELA t300 - 
 @router.get("/t300_juros_poupanca/{mes}/{ano}")
@@ -1316,21 +1352,6 @@ async def t310_juros(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
-# TABELA t310 PNN - 
-# @router.get("/t310_juros_pnn/{mes}/{ano}")
-# async def t310_juros_pnn(mes: int = Path(title="Mês", gt=0,lt=13),
-#                                 ano: int = Path(title="Ano", gt=1900,lt=2100),
-#                                 db: Session = Depends(get_db)):
-#        data_tabela = (db.query(T310JurosPnn)
-#                       .filter(extract('year', T310JurosPnn.data) == ano, 
-#                               extract('month', T310JurosPnn.data) == mes)
-#                       .first()
-#                       )
-#        if data_tabela is not None:
-#             formatar_data(data_tabela)
-#             return data_tabela
-#        raise HTTPException(status_code=404, detail=NOREGS)
-
 @router.get("/t310_juros_pnn")
 async def t310_juros_pnn(db: Session = Depends(get_db)):
      data_tabela = db.query(T310JurosPnn).order_by(T310JurosPnn.data).all()
@@ -1380,10 +1401,9 @@ async def t312_selic(db: Session = Depends(get_db)):
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
 
-
-
-
+# --------------------
 # TABELAS DE CREDITOS
+# --------------------
 
 # TABELA t322 - 
 @router.get("/t322_juros/{mes}/{ano}")
@@ -1585,8 +1605,6 @@ async def t330_juros(db: Session = Depends(get_db)):
 
 
 
-
-
 # TABELA t332 - 
 @router.get("/t332_selic/{mes}/{ano}")
 async def t332_juros(mes: int = Path(title="Mês", gt=0,lt=13),
@@ -1667,8 +1685,17 @@ async def t334_selic(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
-
-
+# ===========================================================================
+# ENDPOINTS — TABELAS DE ÍNDICES PNRJ DE CRÉDITOS (400–499)
+# Cada tabela disponibiliza: consulta por mês/ano, consulta por período
+# e retorno da série histórica completa.
+#
+# Nota: As funções de endpoints abaixo seguem padrão idêntico para todas
+# as tabelas TxxxTabelaPnep. O padrão é:
+#   1. GET /{nome_tabela}/{mes}/{ano}  → registro único
+#   2. GET /{nome_tabela}/periodo      → intervalo via query params
+#   3. GET /{nome_tabela}              → série histórica completa
+# ===========================================================================
 
 # TABELA t400 - 
 @router.get("/t400_tabela_pnrj/{mes}/{ano}")
@@ -1702,7 +1729,6 @@ async def t400_tabela_pnrj(db: Session = Depends(get_db)):
          data_tabela = list(map(formatar_data, data_tabela))
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
-
 
 
 # TABELA t402 - 
@@ -1739,7 +1765,6 @@ async def t402_tabela_pnrj(db: Session = Depends(get_db)):
      raise HTTPException(status_code=404, detail=NOREGS)
 
 
-
 # TABELA t404 - 
 @router.get("/t404_tabela_pnrj/{mes}/{ano}")
 async def t404_tabela_pnrj_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
@@ -1773,8 +1798,6 @@ async def t404_tabela_pnrj(db: Session = Depends(get_db)):
          return data_tabela
      raise HTTPException(status_code=404, detail=NOREGS)
 
-
-
 # TABELA t406 - 
 @router.get("/t406_tabela_pnrj/{mes}/{ano}")
 async def t406_tabela_pnrj_pelo_mes_e_ano(mes: int = Path(title="Mês", gt=0,lt=13),
@@ -1807,7 +1830,6 @@ async def t406_tabela_pnrj(db: Session = Depends(get_db)):
          data_tabela = list(map(formatar_data, data_tabela))
          return data_tabela
      raise HTTPException(status_code=406, detail=NOREGS)
-
 
 
 # TABELA t408 - 
@@ -1844,66 +1866,7 @@ async def t408_tabela_pnrj(db: Session = Depends(get_db)):
      raise HTTPException(status_code=408, detail=NOREGS)
 
 
-
-
-# @router.get("/inventario")
-# async def inventario(db: Session = Depends(get_db)):
-#     data_tabela = db.query(C01tabelainventario).all()
-#     if data_tabela is not None:
-#         return data_tabela
-#     raise HTTPException(status_code=404, detail=NOREGS)
-
-"""
-@router.get("/inventario/")
-async def busca_obs_pelo_codigo_tabela(codigo_tabela: int = Path(gt=0,lt=30),
-                        db: Session = Depends(get_db)):
         
-        data_tabela = db.query(C01tabelainventario.C01_NOME_TABELA,C01tabelainventario.C01_OBS_TABELA).filter(C01tabelainventario.C01_CODIGO == codigo_tabela).first()
-        if data_tabela is not None:
-            return data_tabela
-        raise HTTPException(status_code=404, detail=NOREGS)
-"""
-    
-
-# @router.get("/codigo_tabela/{nome_tabela}")
-# async def busca_codigo_tabela_pelo_titulo(nome_tabela: str,
-#                         db: Session = Depends(get_db)):
-#         data = db.query(C01tabelainventario).filter(C01tabelainventario.C01_NOME_TABELA == nome_tabela).first()
-#         if data is not None:
-#             return data
-#         raise HTTPException(status_code=404, detail=NOREGS)
-
-
-# @router.get("/tabela/{tabela_cod}")
-# async def busca_tabela_pelo_codigo_tabela(tabela_cod: int = Path(gt=0,lt=30),
-#                         db: Session = Depends(get_db)):
-#         tabela = ajusta_nome_tabela(tabela_cod)
-        
-#         data_tabela = db.query(eval(tabela)).all()
-#         if data_tabela is not None:
-#             return data_tabela
-#         raise HTTPException(status_code=404, detail=NOREGS)
-
-
-
-"""
-from sqlalchemy import create_engine
- 
-engine = create_engine('sqlite:///:memory:')
-result = engine.execute("SELECT * FROM users WHERE age >= :age", {'age': 21})
-for row in result:
-    print(row)
-
-
-from sqlalchemy.orm import Session
- 
-session = Session(bind=engine)
-result = session.execute("SELECT * FROM users WHERE age >= :age", {'age': 21})
-for row in result:
-    print(row)
-
-"""
-               
 
 
                

@@ -1,9 +1,61 @@
+"""
+models.py
+=========
+Módulo de modelos ORM (SQLAlchemy) da API de Índices PNRJ.
+
+Responsabilidade:
+    Define o mapeamento objeto-relacional (ORM) entre as classes Python e as
+    tabelas do banco de dados PostgreSQL. Cada classe representa uma tabela
+    do banco e herda de Base (declarative_base).
+
+Organização das tabelas por grupo e faixa de código:
+    ┌──────────────────────────────────────────────────────┐
+    │ Grupo               │ Código    │ Classes            │
+    ├──────────────────────────────────────────────────────┤
+    │ Indexadores BCB     │ < 200     │ Selic, SelicCopom, │
+    │                     │           │ Tr, Inpc, Ipca,    │
+    │                     │           │ Ipca15, Igpm       │
+    ├──────────────────────────────────────────────────────┤
+    │ Índices PNRJ        │ 200–299   │ T200 … T236        │
+    ├──────────────────────────────────────────────────────┤
+    │ Juros               │ 300–399   │ T300 … T334        │
+    ├──────────────────────────────────────────────────────┤
+    │ Índices adicionais  │ 400–499   │ T400 … T408        │
+    │ (crédito)           │           │                    │
+    ├──────────────────────────────────────────────────────┤
+    │ Controle/metadados  │ —         │ LogAtualizacao,    │
+    │                     │           │ DescricaoTabelas,  │
+    │                     │           │ RegraAtualizacao,  │
+    │                     │           │ Indexadores        │
+    └──────────────────────────────────────────────────────┘
+
+Base de dados:
+    PostgreSQL — banco 'indices' conforme configurado em pgsqlapi.env.
+
+Consumido por:
+    - main.py          (Base.metadata.create_all)
+    - routers/tabelas.py (consultas ORM via Session)
+
+Dependências:
+    - sqlalchemy
+"""
+
 # coding: utf-8
 from sqlalchemy import BigInteger, Column, DateTime, Integer, Numeric, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 
+# ---------------------------------------------------------------------------
+# Base declarativa — ponto de registro de todos os modelos ORM
+# ---------------------------------------------------------------------------
 Base = declarative_base()
 metadata = Base.metadata
+
+# ===========================================================================
+# INDEXADORES BCB (código < 200)
+# Séries temporais brutas coletadas diretamente da API pública do BCB (SGS).
+# Cada registro contém: id, data (mês de referência), valor (taxa/índice).
+# Alimentados pelo sistema PNRJ via pnrj_indexadores.py.
+# ===========================================================================
 
 class Selic(Base):
     __tablename__ = 'selic'
@@ -59,6 +111,11 @@ class Igpm(Base):
     data = Column(DateTime(True))
     valor = Column(Numeric)    
 
+# ===========================================================================
+# TABELAS DE CONTROLE E METADADOS
+# Tabelas auxiliares para gerenciamento e autodescoberta das demais tabelas.
+# ===========================================================================
+
 class LogAtualizacao(Base):    
     __tablename__ = 'logatualizacao'
 
@@ -98,6 +155,26 @@ class Indexadores(Base):
     nome = Column(String(20))
     descricao = Column(String(100))
     
+# ===========================================================================
+# TABELAS DE ÍNDICES PNRJ (código 200–299)
+# Tabelas de correção monetária calculadas com base nos indexadores BCB.
+# Cada tabela representa uma combinação de indexador + data-base de cálculo.
+#
+# Estrutura comum a todas as tabelas TxxxTabelaPnrj:
+#   data             — mês de referência
+#   indexador        — nome do indexador base (ex: 'IPCA', 'TR')
+#   variacao_mensal  — variação percentual do indexador no mês (valor/100)
+#   numero_indice    — 1 + variacao_mensal
+#   fator_vigente    — fator_anterior × numero_indice (acumulado desde data-base)
+#   indice_correcao  — índice de correção relativo ao último mês da série
+#                      (recalculado integralmente a cada atualização)
+#
+# Fórmulas:
+#   variacao_mensal  = valor_bcb / 100
+#   numero_indice    = 1 + variacao_mensal
+#   fator_vigente    = fator_vigente_anterior × numero_indice
+#   indice_correcao  = fator_vigente_último / fator_vigente (para cada linha)
+# ===========================================================================
 
 class T200TabelaPnrj(Base):
     __tablename__ = 't200_tabela_pnrj'
@@ -326,6 +403,12 @@ class T236TabelaPnrj(Base):
     fator_vigente = Column(Numeric)
     indice_correcao = Column(Numeric)
     
+# ===========================================================================
+# TABELAS DE JUROS (código 300–399)
+# Taxas de juros mensais e acumuladas calculadas pelo sistema PNRJ.
+# As tabelas de juros derivados (T302–T334) são calculadas com base
+# na taxa da poupança (T300) e/ou na SELIC acumulada (T312).
+# ===========================================================================
 
 class T300Juros(Base):
     __tablename__ = 't300_juros_poupanca'
@@ -397,8 +480,9 @@ class T312Selic(Base):
     selic_acumulada = Column(Numeric)
     selic_acumulada_mensal = Column(Numeric)
 
-#==================================================
-# tabelas criadas para uso do credito - 27/3/2026
+# -------------------------------
+# Tabelas de juros para crédito 
+# -------------------------------
 
 class T322Juros(Base):
     __tablename__ = 't322_juros'
@@ -459,22 +543,11 @@ class T334Selic(Base):
     selic_acumulada_mensal = Column(Numeric)
 
 
-# tabelas criadas para uso do credito
-#===============================================
-
-
-
-# class T400Tabela(Base):
-#     __tablename__ = 'serie_historica_moedas'
-
-#     id = Column(BigInteger, primary_key=True)
-#     vigencia = Column(String(20))
-#     moeda = Column(String(20))
-#     alteracao = Column(String(150))
-#     legislacao = Column(Text)
-
-
-# inclusao das tabelas de creditos
+# ===========================================================================
+# TABELAS DE ÍNDICES — CRÉDITO (código 400–499)
+# Mesma estrutura das tabelas 200–299, mas com data-base e indexadores
+# específicos para uso em contratos de crédito.
+# ===========================================================================
 
 class T400TabelaPnrj(Base):
     __tablename__ = 't400_tabela_pnrj'
