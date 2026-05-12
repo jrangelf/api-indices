@@ -1,48 +1,48 @@
-# 🔌 api-indice — API REST de Índices e Correção Monetária PNRJ
+# api-indice — API REST de Índices e Correção Monetária PNRJ
 
 > **API FastAPI que expõe indexadores econômicos do Banco Central e índices de correção monetária calculados pelo sistema PNRJ — dados prontos para consumo por qualquer aplicação financeira.**
 
 ---
 
-## 🧭 Sobre o Projeto
+## Sobre o Projeto
 
 A **api-indice** é a camada de acesso público do ecossistema PNRJ. Ela conecta-se ao banco de dados PostgreSQL que é alimentado e mantido pelo **[sistema PNRJ](../PNRJ/README.md)** — responsável pela coleta automática dos indexadores no Banco Central do Brasil e pelo cálculo dos índices de correção monetária e juros.
 
 Enquanto o sistema PNRJ **escreve** os dados periodicamente, a **api-indice** os **lê e os expõe** via endpoints REST, permitindo que outras aplicações consumam taxas econômicas atualizadas (IPCA, SELIC, TR, IGPM, INPC, IPCA-15) e índices de correção PNRJ sem precisar acessar diretamente o banco ou a API do Banco Central.
 
 ```
-┌─────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────┐
 │                    Ecossistema PNRJ                      │
 │                                                          │
-│  [API BCB/SGS] ──▶ [Sistema PNRJ] ──▶ [PostgreSQL]      │
+│  [API BCB/SGS] ──▶ [Sistema PNRJ] ──▶ [PostgreSQL]       │
 │                                              │           │
 │                                              ▼           │
 │                                      [api-indice]        │
 │                                          :8004           │
 │                                              │           │
-│                          ┌───────────────────┤          │
+│                          ┌───────────────────┤           │
 │                          ▼                   ▼           │
 │                   [App Financeira]   [Sistema PNRJ]      │
 │                   (consumidor)       (consultas internas)│
-└─────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-- 📈 **Indexadores BCB** — Consulta de IPCA, IPCA-15, INPC, TR, SELIC, SELIC COPOM e IGPM por mês/ano ou período
-- 📊 **Índices de Correção PNRJ** — Acesso às tabelas de fator vigente e índice de correção (T200 a T408) com variação mensal, número índice e correção acumulada
-- 💰 **Juros** — Tabelas de juros da poupança, SELIC acumulada e juros derivados para uso em contratos de crédito (T300 a T334)
-- 🗂️ **Metadados** — Endpoints de descoberta: catálogo de tabelas, regras de cálculo e log de atualização
-- 🔍 **3 modos de consulta por tabela**: registro único (`/{tabela}/{mes}/{ano}`), série completa (`/{tabela}`) e intervalo (`/{tabela}/periodo`)
-- ✅ **Validação de parâmetros** — Verificação automática de intervalos de mês (1–12), ano e coerência de períodos (início ≤ fim)
-- 🐳 **Containerizado** — Deploy completo com Docker Compose (API + PostgreSQL em rede dedicada)
-- 📝 **Logging** — Registro de eventos em `api.log` com nível, timestamp e mensagem
+- **Indexadores BCB** — Consulta de IPCA, IPCA-15, INPC, TR, SELIC, SELIC COPOM e IGPM por mês/ano ou período
+- **Índices de Correção PNRJ** — Acesso às tabelas de fator vigente e índice de correção (T200 a T408) com variação mensal, número índice e correção acumulada
+- **Juros** — Tabelas de juros da poupança, SELIC acumulada e juros derivados para uso em contratos de crédito (T300 a T334)
+- **Metadados** — Endpoints de descoberta: catálogo de tabelas, regras de cálculo e log de atualização
+- **3 modos de consulta por tabela**: registro único (`/{tabela}/{mes}/{ano}`), série completa (`/{tabela}`) e intervalo (`/{tabela}/periodo`)
+- **Validação de parâmetros** — Verificação automática de intervalos de mês (1–12), ano e coerência de períodos (início ≤ fim)
+- **Containerizado** — Deploy completo com Docker Compose (API + PostgreSQL em rede dedicada)
+- **Logging** — Registro de eventos em `api.log` com nível, timestamp e mensagem
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ### Estrutura de Arquivos
 
@@ -99,7 +99,7 @@ JSON Response: {"id": 1, "data": "01/03/2024", "valor": 0.83}
 
 ---
 
-## 📋 Endpoints
+## Endpoints
 
 ### Padrão de rotas (repetido para cada indexador/tabela)
 
@@ -147,7 +147,7 @@ curl http://localhost:8004/t300_juros_poupanca/4/2024
 
 ---
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 | Categoria | Tecnologia |
 |-----------|-----------|
@@ -162,7 +162,7 @@ curl http://localhost:8004/t300_juros_poupanca/4/2024
 
 ---
 
-## ⚙️ Instalação e Execução
+## Instalação e Execução
 
 ### Pré-requisitos
 
@@ -232,7 +232,7 @@ uvicorn main:app --reload --port 8004
 
 ---
 
-## 🗂️ Estrutura Docker
+## Estrutura Docker
 
 ```yaml
 # docker-compose.yml
@@ -255,7 +255,7 @@ networks:
 
 ---
 
-## 🔗 Integração com o Sistema PNRJ
+## Integração com o Sistema PNRJ
 
 Esta API é consumida internamente pelo **sistema PNRJ** (`PNRJ_api_index.py`) para consulta de valores de indexadores já processados durante o cálculo dos índices de correção monetária e juros. Os dados que a API expõe são escritos pelo próprio sistema PNRJ — formando um ciclo fechado:
 
@@ -268,7 +268,7 @@ Esta API é consumida internamente pelo **sistema PNRJ** (`PNRJ_api_index.py`) p
 
 ---
 
-## ⚠️ Pontos de Atenção
+## Pontos de Atenção
 
 - **`Base.metadata.create_all`** em `main.py` cria as tabelas automaticamente na primeira inicialização. Em ambientes de produção com esquema estabelecido, considere substituir por migrações explícitas (Alembic).
 - **Modo `--reload`** do Uvicorn está ativo no Dockerfile — adequado para desenvolvimento, mas desabilite em produção.
@@ -277,7 +277,7 @@ Esta API é consumida internamente pelo **sistema PNRJ** (`PNRJ_api_index.py`) p
 
 ---
 
-## 🤝 Contribuição
+## Contribuição
 
 1. Faça um **fork** do repositório
 2. Crie uma branch: `git checkout -b feature/minha-feature`
@@ -287,7 +287,7 @@ Esta API é consumida internamente pelo **sistema PNRJ** (`PNRJ_api_index.py`) p
 
 ---
 
-## 📄 Licença
+## Licença
 
 Distribuído sob a licença **MIT**. Consulte o arquivo [LICENSE](LICENSE) para detalhes.
 
