@@ -1,0 +1,10 @@
+  265  cd pgsqlapi
+  266  ls
+  267  ls backup
+  268  ls db
+  269  ls backup
+  270  ls
+  271  docker exec -i pgsqlapi sh -c "pg_dump -U postgres indices > /db/backup/indices_$(date '+%d-%m-%Y_%H%M%S').sql"
+  272  ls
+  273  ls backup
+  274  history | tail -n 10 >>executar_tail_docker
