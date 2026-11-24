@@ -4,22 +4,6 @@ WORKDIR /api
 
 COPY ./requirements.txt .
 
-
-#RUN apt update -y
-#RUN apt upgrade -y
-
-#RUN apt-get install -y build-essential python3
-#RUN apt-get install -y python3-dev
-#RUN apt-get install -y python3-pip
-
-##RUN pip3 install --no-cache-dir -r requirements.txt
-#RUN pip3 install --break-system-packages --no-cache-dir -r requirements.txt
-
-#RUN apt install build-essential python3 -y
-#RUN apt install python3-dev -y
-#RUN apt install python3-pip -y
-#RUN pip3 install --no-cache-dir -r requirements.txt
-
 # Instalar dependências do sistema operacional
 RUN apt update && \
     apt install -y --no-install-recommends \

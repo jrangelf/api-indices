@@ -5,6 +5,4 @@ zeep
 sqlalchemy
 fastapi
 uvicorn[standard]
-#pydantic
 python-decouple
-psycopg[binary]

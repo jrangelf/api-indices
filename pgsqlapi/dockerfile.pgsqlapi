@@ -1,4 +1,4 @@
-FROM postgres:15.20
+FROM postgres:15.3
 
 WORKDIR /db
 

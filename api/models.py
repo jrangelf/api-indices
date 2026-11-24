@@ -1,61 +1,9 @@
-"""
-models.py
-=========
-Módulo de modelos ORM (SQLAlchemy) da API de Índices PNRJ.
-
-Responsabilidade:
-    Define o mapeamento objeto-relacional (ORM) entre as classes Python e as
-    tabelas do banco de dados PostgreSQL. Cada classe representa uma tabela
-    do banco e herda de Base (declarative_base).
-
-Organização das tabelas por grupo e faixa de código:
-    ┌──────────────────────────────────────────────────────┐
-    │ Grupo               │ Código    │ Classes            │
-    ├──────────────────────────────────────────────────────┤
-    │ Indexadores BCB     │ < 200     │ Selic, SelicCopom, │
-    │                     │           │ Tr, Inpc, Ipca,    │
-    │                     │           │ Ipca15, Igpm       │
-    ├──────────────────────────────────────────────────────┤
-    │ Índices PNRJ        │ 200–299   │ T200 … T236        │
-    ├──────────────────────────────────────────────────────┤
-    │ Juros               │ 300–399   │ T300 … T334        │
-    ├──────────────────────────────────────────────────────┤
-    │ Índices adicionais  │ 400–499   │ T400 … T408        │
-    │ (crédito)           │           │                    │
-    ├──────────────────────────────────────────────────────┤
-    │ Controle/metadados  │ —         │ LogAtualizacao,    │
-    │                     │           │ DescricaoTabelas,  │
-    │                     │           │ RegraAtualizacao,  │
-    │                     │           │ Indexadores        │
-    └──────────────────────────────────────────────────────┘
-
-Base de dados:
-    PostgreSQL — banco 'indices' conforme configurado em pgsqlapi.env.
-
-Consumido por:
-    - main.py          (Base.metadata.create_all)
-    - routers/tabelas.py (consultas ORM via Session)
-
-Dependências:
-    - sqlalchemy
-"""
-
 # coding: utf-8
 from sqlalchemy import BigInteger, Column, DateTime, Integer, Numeric, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 
-# ---------------------------------------------------------------------------
-# Base declarativa — ponto de registro de todos os modelos ORM
-# ---------------------------------------------------------------------------
 Base = declarative_base()
 metadata = Base.metadata
-
-# ===========================================================================
-# INDEXADORES BCB (código < 200)
-# Séries temporais brutas coletadas diretamente da API pública do BCB (SGS).
-# Cada registro contém: id, data (mês de referência), valor (taxa/índice).
-# Alimentados pelo sistema PNRJ via pnrj_indexadores.py.
-# ===========================================================================
 
 class Selic(Base):
     __tablename__ = 'selic'
@@ -75,6 +23,13 @@ class SelicCopom(Base):
 
 class Tr(Base):
     __tablename__ = 'tr'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    valor = Column(Numeric)
+
+class TxLegal(Base):
+    __tablename__ = 'txlegal'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
@@ -110,11 +65,6 @@ class Igpm(Base):
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
     valor = Column(Numeric)    
-
-# ===========================================================================
-# TABELAS DE CONTROLE E METADADOS
-# Tabelas auxiliares para gerenciamento e autodescoberta das demais tabelas.
-# ===========================================================================
 
 class LogAtualizacao(Base):    
     __tablename__ = 'logatualizacao'
@@ -155,26 +105,6 @@ class Indexadores(Base):
     nome = Column(String(20))
     descricao = Column(String(100))
     
-# ===========================================================================
-# TABELAS DE ÍNDICES PNRJ (código 200–299)
-# Tabelas de correção monetária calculadas com base nos indexadores BCB.
-# Cada tabela representa uma combinação de indexador + data-base de cálculo.
-#
-# Estrutura comum a todas as tabelas TxxxTabelaPnrj:
-#   data             — mês de referência
-#   indexador        — nome do indexador base (ex: 'IPCA', 'TR')
-#   variacao_mensal  — variação percentual do indexador no mês (valor/100)
-#   numero_indice    — 1 + variacao_mensal
-#   fator_vigente    — fator_anterior × numero_indice (acumulado desde data-base)
-#   indice_correcao  — índice de correção relativo ao último mês da série
-#                      (recalculado integralmente a cada atualização)
-#
-# Fórmulas:
-#   variacao_mensal  = valor_bcb / 100
-#   numero_indice    = 1 + variacao_mensal
-#   fator_vigente    = fator_vigente_anterior × numero_indice
-#   indice_correcao  = fator_vigente_último / fator_vigente (para cada linha)
-# ===========================================================================
 
 class T200TabelaPnrj(Base):
     __tablename__ = 't200_tabela_pnrj'
@@ -402,13 +332,225 @@ class T236TabelaPnrj(Base):
     numero_indice = Column(Numeric)
     fator_vigente = Column(Numeric)
     indice_correcao = Column(Numeric)
-    
-# ===========================================================================
-# TABELAS DE JUROS (código 300–399)
-# Taxas de juros mensais e acumuladas calculadas pelo sistema PNRJ.
-# As tabelas de juros derivados (T302–T334) são calculadas com base
-# na taxa da poupança (T300) e/ou na SELIC acumulada (T312).
-# ===========================================================================
+
+
+class T238TabelaPnrj(Base):
+    __tablename__ = 't238_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+#===============================================
+# tabelas criadas após EC136
+#===============================================
+
+class T240TabelaPnrj(Base):
+    __tablename__ = 't240_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T242TabelaPnrj(Base):
+    __tablename__ = 't242_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T244TabelaPnrj(Base):
+    __tablename__ = 't244_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T246TabelaPnrj(Base):
+    __tablename__ = 't246_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T248TabelaPnrj(Base):
+    __tablename__ = 't248_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T250TabelaPnrj(Base):
+    __tablename__ = 't250_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T252TabelaPnrj(Base):
+    __tablename__ = 't252_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T254TabelaPnrj(Base):
+    __tablename__ = 't254_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T256TabelaPnrj(Base):
+    __tablename__ = 't256_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T258TabelaPnrj(Base):
+    __tablename__ = 't258_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T260TabelaPnrj(Base):
+    __tablename__ = 't260_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T262TabelaPnrj(Base):
+    __tablename__ = 't262_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T264TabelaPnrj(Base):
+    __tablename__ = 't264_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T266TabelaPnrj(Base):
+    __tablename__ = 't266_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T268TabelaPnrj(Base):
+    __tablename__ = 't268_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+class T270TabelaPnrj(Base):
+    __tablename__ = 't270_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+
+
+
+
+
+
+#===============================================
+
+
+
 
 class T300Juros(Base):
     __tablename__ = 't300_juros_poupanca'
@@ -480,9 +622,26 @@ class T312Selic(Base):
     selic_acumulada = Column(Numeric)
     selic_acumulada_mensal = Column(Numeric)
 
-# -------------------------------
-# Tabelas de juros para crédito 
-# -------------------------------
+
+class T314Juros(Base):
+    __tablename__ = 't314_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+
+class T316Juros(Base):
+    __tablename__ = 't316_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+
+#==================================================
 
 class T322Juros(Base):
     __tablename__ = 't322_juros'
@@ -542,12 +701,35 @@ class T334Selic(Base):
     selic_acumulada = Column(Numeric)
     selic_acumulada_mensal = Column(Numeric)
 
+class T336Juros(Base):
+    __tablename__ = 't336_juros'
 
-# ===========================================================================
-# TABELAS DE ÍNDICES — CRÉDITO (código 400–499)
-# Mesma estrutura das tabelas 200–299, mas com data-base e indexadores
-# específicos para uso em contratos de crédito.
-# ===========================================================================
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T338Juros(Base):
+    __tablename__ = 't338_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+class T340Juros(Base):
+    __tablename__ = 't340_juros'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    juros_mensal = Column(Numeric)
+    juros_acumulados = Column(Numeric)
+
+
+
+# tabelas criadas para uso do credito
+#===============================================
+
 
 class T400TabelaPnrj(Base):
     __tablename__ = 't400_tabela_pnrj'
@@ -598,6 +780,50 @@ class T406TabelaPnrj(Base):
 
 class T408TabelaPnrj(Base):
     __tablename__ = 't408_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+class T410TabelaPnrj(Base):
+    __tablename__ = 't410_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+class T412TabelaPnrj(Base):
+    __tablename__ = 't412_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+class T414TabelaPnrj(Base):
+    __tablename__ = 't414_tabela_pnrj'
+
+    id = Column(BigInteger, primary_key=True)
+    data = Column(DateTime(True))
+    indexador = Column(String(20))
+    variacao_mensal = Column(Numeric)
+    numero_indice = Column(Numeric)
+    fator_vigente = Column(Numeric)
+    indice_correcao = Column(Numeric)
+
+class T416TabelaPnrj(Base):
+    __tablename__ = 't416_tabela_pnrj'
 
     id = Column(BigInteger, primary_key=True)
     data = Column(DateTime(True))
