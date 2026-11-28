@@ -1,4 +1,6 @@
-postgres/db/
+# PostgreSQL - dados físicos e backups
+/pgsqlapi/db/
+/pgsqlapi/backup/
 
 # Django #
 *.log
